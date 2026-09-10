@@ -4,6 +4,12 @@ import { company } from "@/data/company";
 
 const links = [
   {
+    title: "الموقع الرسمي",
+    subtitle: company.name,
+    href: company.website,
+    icon: "🌐",
+  },
+  {
     title: "اتصل بنا",
     subtitle: company.phone,
     href: `tel:${company.phone}`,
@@ -44,12 +50,6 @@ const links = [
     subtitle: company.email,
     href: `mailto:${company.email}`,
     icon: "✉",
-  },
-  {
-    title: "الموقع الرسمي",
-    subtitle: company.name,
-    href: company.website,
-    icon: "🌐",
   },
 ];
 
