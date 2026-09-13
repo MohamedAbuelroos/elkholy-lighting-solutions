@@ -1,25 +1,44 @@
 export const company = {
   name: "Elkholy Lighting Solutions",
-  nameAr: "الخولي للإضاءة والحلول الذكية",
+  nameAr: "الخولي للإضاءة والأنظمة الذكية",
 
-  tagline: "نصنع تجربة متكاملة للإضاءة والتشطيبات والأنظمة الذكية",
-
-  phone: "+201006786986",
+  tagline: "نصنع تجربة متكاملة للإضاءة والتشطيبات والحلول الذكية",
 
   email: "info@elkholylightingsolutions.com",
-
-  address: "البحيرة, دمنهور شارع عبدالسلام الشاذلى  - أمام النادي الاجتماعى",
 
   workingHours: {
     days: "السبت - الخميس",
     hours: "10:00 صباحًا - 10:00 مساءً",
   },
 
+  phones: [
+    {
+      name: "Elkholy Lighting Solutions",
+      label: "الرقم الرئيسي",
+      number: "+201006786986",
+    },
+    {
+      name: "علاء الخولي",
+      label: "للتواصل والاستفسارات",
+      number: "+201006786986",
+    },
+    {
+      name: "إبراهيم الخولي",
+      label: "للتواصل والاستفسارات",
+      number: "+201004735355",
+    },
+    {
+      name: "خدمة العملاء",
+      label: "خدمة العملاء",
+      number: "+201557281927",
+    },
+  ],
+
   whatsapp: [
     {
       name: "Elkholy Lighting Solutions",
       label: "Official WhatsApp",
-      number: "+201004735355",
+      number: "+201006786986",
     },
     {
       name: "Alaa Elkholy",
@@ -30,6 +49,20 @@ export const company = {
       name: "Ebrahim Elkholy",
       label: "WhatsApp",
       number: "+201002393901",
+    },
+  ],
+
+  branches: [
+    {
+      name: "معرض الخولي - الفرع الأول",
+      address: "البحيرة - دمنهور - شارع 23 يوليو - بجوار المحكمة القديمة",
+      maps: "#",
+    },
+    {
+      name: "معرض الخولي - الفرع الثاني",
+      address:
+        "البحيرة - دمنهور - شارع عبدالسلام الشاذلى برج ايفي - اما سور النادى الاجتماعى",
+      maps: "#",
     },
   ],
 
@@ -72,7 +105,6 @@ export const company = {
 
     tiktok: "https://www.tiktok.com/@alaaelkholy120?_r=1&_t=ZS-99chlFrox85",
     youtube: "#",
-    maps: "#",
   },
 
   website: "/",

@@ -26,7 +26,7 @@ import {
 
 import { company } from "@/data/company";
 
-type SheetType = "whatsapp" | "facebook" | "instagram" | null;
+type SheetType = "whatsapp" | "phone" | "facebook" | "instagram" | null;
 
 type LinkCard = {
   title: string;
@@ -54,9 +54,9 @@ const cards: LinkCard[] = [
   },
   {
     title: "اتصل بنا",
-    subtitle: company.phone,
+    subtitle: `${company.phones.length} أرقام للتواصل`,
     icon: FaPhone,
-    href: `tel:${company.phone}`,
+    sheet: "phone",
   },
   {
     title: "Facebook",
@@ -83,12 +83,12 @@ const cards: LinkCard[] = [
     href: company.social.youtube,
   },
 
-  {
-    title: "الفروع",
-    subtitle: "اعرف موقعنا على الخريطة",
-    icon: FaLocationDot,
-    href: company.social.maps,
-  },
+  // {
+  //   title: "الفروع",
+  //   subtitle: "اعرف موقعنا على الخريطة",
+  //   icon: FaLocationDot,
+  //   href: company.social.maps,
+  // },
   {
     title: "البريد الإلكتروني",
     subtitle: company.email,
@@ -124,6 +124,7 @@ export default function LinksPage() {
 
   const getSheetTitle = () => {
     if (activeSheet === "whatsapp") return "تواصل معنا عبر واتساب";
+    if (activeSheet === "phone") return "اتصل بنا";
     if (activeSheet === "facebook") return "صفحات Facebook";
     if (activeSheet === "instagram") return "حسابات Instagram";
 
@@ -339,12 +340,26 @@ export default function LinksPage() {
                   <FaLocationDot />
                 </div>
 
-                <div>
-                  <p className="font-semibold text-white">عنوان المعرض</p>
+                <div className="min-w-0">
+                  <p className="font-semibold text-white">فروعنا</p>
 
-                  <p className="mt-2 text-sm leading-7 text-white/45">
-                    {company.address}
-                  </p>
+                  <div className="mt-3 space-y-3">
+                    {company.branches.map((branch, index) => (
+                      <div key={branch.name}>
+                        <p className="text-sm font-medium text-white/70">
+                          {branch.name}
+                        </p>
+
+                        <p className="mt-1 text-sm leading-6 text-white/40">
+                          {branch.address}
+                        </p>
+
+                        {index < company.branches.length - 1 && (
+                          <div className="mt-3 h-px bg-white/[0.06]" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -463,6 +478,43 @@ export default function LinksPage() {
             </div>
           )}
 
+          {/* Phone */}
+          {activeSheet === "phone" && (
+            <div className="space-y-3">
+              {company.phones.map((contact, index) => (
+                <a
+                  key={`${contact.name}-${index}`}
+                  href={`tel:${contact.number.replace(/\s/g, "")}`}
+                  className="group flex items-center justify-between rounded-[22px] border border-white/[0.07] bg-white/[0.035] p-4 transition-all duration-300 hover:border-[#D6A744]/25 hover:bg-[#D6A744]/[0.04]"
+                >
+                  <div className="flex min-w-0 items-center gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#D6A744]/10 text-lg text-[#D6A744]">
+                      <FaPhone />
+                    </div>
+
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-white">
+                        {contact.name}
+                      </h3>
+
+                      <p className="mt-1 text-xs text-white/35">
+                        {contact.label}
+                      </p>
+
+                      <p
+                        dir="ltr"
+                        className="mt-1 text-right text-xs text-white/30"
+                      >
+                        {contact.number}
+                      </p>
+                    </div>
+                  </div>
+
+                  <FaChevronLeft className="shrink-0 text-xs text-white/20 transition-all duration-300 group-hover:-translate-x-1 group-hover:text-[#D6A744]" />
+                </a>
+              ))}
+            </div>
+          )}
           {/* Facebook */}
           {activeSheet === "facebook" && (
             <div className="space-y-3">
