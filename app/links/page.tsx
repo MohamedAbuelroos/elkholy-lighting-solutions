@@ -167,7 +167,7 @@ export default function LinksPage() {
 
               <div className="relative h-full w-full overflow-hidden rounded-[30px] border border-[#D6A744]/25 bg-black shadow-[0_25px_90px_rgba(0,0,0,0.55)]">
                 <Image
-                  src="/logo/elkholy-logo.jpeg"
+                  src="/logo/logo-elkholy.jpg"
                   alt={company.name}
                   fill
                   priority
