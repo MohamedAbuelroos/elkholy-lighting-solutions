@@ -58,7 +58,7 @@ export function SolutionsSection() {
 
             <h2
               id="solutions-title"
-              className="text-3xl font-semibold leading-[1.4] text-foreground sm:text-4xl"
+              className="text-4xl font-bold leading-[1.4] text-foreground sm:text-5xl"
             >
               حلول تناسب
               <span className="mt-1 block text-primary">تفاصيل مشروعك.</span>
