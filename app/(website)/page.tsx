@@ -4,6 +4,7 @@ import { FeaturedProducts } from "@/components/home/products/featured-products";
 import { PopularProducts } from "@/components/home/products/popular-products";
 import { SolutionsSection } from "@/components/home/solutions/solutions-section";
 import { WhyElkholy } from "@/components/home/why-elkholy/why-elkholy";
+import { ContactCTA } from "@/components/home/contact-cta/contact-cta";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <PopularProducts />
       <SolutionsSection />
       <WhyElkholy />
+      <ContactCTA />
     </>
   );
 }
