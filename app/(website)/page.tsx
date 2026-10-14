@@ -3,6 +3,8 @@ import { CategoryShowcase } from "@/components/home/category/category-showcase";
 import { FeaturedProducts } from "@/components/home/products/featured-products";
 import { PopularProducts } from "@/components/home/products/popular-products";
 import { SolutionsSection } from "@/components/home/solutions/solutions-section";
+import { WhyElkholy } from "@/components/home/why-elkholy/why-elkholy";
+
 export default function HomePage() {
   return (
     <>
@@ -11,6 +13,7 @@ export default function HomePage() {
       <FeaturedProducts />
       <PopularProducts />
       <SolutionsSection />
+      <WhyElkholy />
     </>
   );
 }
