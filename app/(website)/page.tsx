@@ -2,7 +2,7 @@ import { Hero } from "@/components/home/hero/hero";
 import { CategoryShowcase } from "@/components/home/category/category-showcase";
 import { FeaturedProducts } from "@/components/home/products/featured-products";
 import { PopularProducts } from "@/components/home/products/popular-products";
-
+import { SolutionsSection } from "@/components/home/solutions/solutions-section";
 export default function HomePage() {
   return (
     <>
@@ -10,6 +10,7 @@ export default function HomePage() {
       <CategoryShowcase />
       <FeaturedProducts />
       <PopularProducts />
+      <SolutionsSection />
     </>
   );
 }
