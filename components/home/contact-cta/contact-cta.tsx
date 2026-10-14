@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaArrowLeft, FaLocationDot } from "react-icons/fa6";
-
+import { LightTrails } from "@/components/ui/light-trails";
 import { routes } from "@/config/routes";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 
@@ -15,22 +15,10 @@ export function ContactCTA() {
       <div className="site-container">
         <div className="relative isolate overflow-hidden rounded-3xl border border-primary/20 bg-surface px-6 py-12 sm:px-10 sm:py-16 lg:px-14">
           {/* Soft decoration */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,var(--color-primary),transparent_65%)] opacity-[0.08]"
-          />
+          <LightTrails variant="flow" />
 
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-28 -left-20 -z-10 size-72 rounded-full border border-primary/15 sm:size-96"
-          />
-
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-36 -left-28 -z-10 size-96 rounded-full border border-primary/10 sm:size-[30rem]"
-          />
-
-          <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+          <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+            {" "}
             <div className="max-w-xl">
               <p className="mb-4 flex items-center gap-3 text-xs font-medium text-primary sm:text-sm">
                 <span aria-hidden="true" className="h-px w-8 bg-primary" />
@@ -52,7 +40,6 @@ export function ContactCTA() {
                 عن المنتجات والحلول المناسبة.
               </p>
             </div>
-
             <div className="flex w-full flex-col gap-3 lg:max-w-xs">
               <a
                 href={getPrimaryWhatsAppHref()}
