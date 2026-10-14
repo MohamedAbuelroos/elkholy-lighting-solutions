@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Cairo } from "next/font/google";
+
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -12,15 +15,11 @@ export const metadata: Metadata = {
   description: "حلول الإضاءة الذكية والتشطيبات الكهربائية الحديثة",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body className={`${cairo.variable} font-sans antialiased`}>
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
