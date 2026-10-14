@@ -334,3 +334,32 @@ body,
 .product-slider::-webkit-scrollbar {
   display: none;
 }
+
+.light-trails {
+  color: #d6a744;
+  opacity: 0.55;
+  transition: opacity 250ms ease;
+}
+
+.light-trails-glow {
+  opacity: 0.2;
+  filter: blur(9px);
+}
+
+.light-trails-lines {
+  opacity: 0.3;
+}
+
+:root[data-theme="light"] .light-trails {
+  opacity: 0.35;
+}
+
+:root[data-theme="light"] .light-trails-glow {
+  opacity: 0.08;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light-trails {
+    transition: none;
+  }
+}

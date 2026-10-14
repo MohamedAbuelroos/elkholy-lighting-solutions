@@ -1,7 +1,7 @@
 import { FaArrowLeft, FaLightbulb, FaSliders, FaPlug } from "react-icons/fa6";
-
 import { company } from "@/data/company";
 import { buildWhatsAppUrl, getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
+import { LightTrails } from "@/components/ui/light-trails";
 
 const solutions = [
   {
@@ -46,9 +46,10 @@ export function SolutionsSection() {
     <section
       id="solutions"
       aria-labelledby="solutions-title"
-      className="section-space border-t border-border bg-background"
+      className="section-space relative isolate overflow-hidden border-t border-border bg-background"
     >
-      <div className="site-container">
+      <LightTrails variant="flow" />
+      <div className="site-container relative z-10">
         <div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="mb-3 flex items-center gap-3 text-xs font-medium text-primary sm:text-sm">
