@@ -31,21 +31,21 @@
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --background: #faf8f4;
-  --foreground: #20201f;
+  --background: #e4e0d8;
+  --foreground: #292723;
 
-  --surface: #ffffff;
-  --surface-elevated: #f1ede5;
+  --surface: #ece8e1;
+  --surface-elevated: #d9d4cb;
 
   --primary: #8c651e;
   --primary-hover: #755218;
   --primary-dark: #624414;
   --on-primary: #ffffff;
 
-  --muted: #67635d;
-  --border: #e3ddd2;
+  --muted: #625d55;
+  --border: #c9c2b7;
 
-  --navbar-background: rgb(250 248 244 / 88%);
+  --navbar-background: rgb(228 224 216 / 90%);
   --navbar-shadow: 0 8px 32px rgb(45 34 15 / 6%);
 }
 
@@ -302,10 +302,10 @@ body,
 .hero-bottom-fade::after {
   background: linear-gradient(
     to top,
-    #faf8f4 0%,
-    rgb(250 248 244 / 85%) 15%,
-    rgb(250 248 244 / 45%) 40%,
-    rgb(250 248 244 / 12%) 70%,
+    #e4e0d8 0%,
+    rgb(228 224 216 / 85%) 15%,
+    rgb(228 224 216 / 45%) 40%,
+    rgb(228 224 216 / 12%) 70%,
     transparent 100%
   );
   opacity: 0;

@@ -63,7 +63,7 @@ export function FeaturedProducts() {
             return (
               <div
                 key={product.id}
-                className="w-[78%] shrink-0 snap-start sm:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4rem)/4)]"
+                className="w-[78%] shrink-0 snap-start sm:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-3rem)/4)]"
               >
                 <ProductCard
                   product={product}
