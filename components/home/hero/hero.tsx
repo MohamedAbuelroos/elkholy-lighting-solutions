@@ -3,7 +3,6 @@ import Link from "next/link";
 import { FaArrowLeft, FaLocationDot } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa";
 
-import { routes } from "@/config/routes";
 import { siteConfig } from "@/config/site";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 
@@ -58,17 +57,18 @@ export function Hero() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <a
               href={getPrimaryWhatsAppHref()}
+              target="_blank"
               className="inline-flex min-h-12 items-center justify-center gap-3 rounded-control bg-[#D6A744] px-6 py-3 text-sm font-semibold text-[#05070B] transition-colors duration-200 hover:bg-[#E2B858]"
             >
               <FaWhatsapp aria-hidden="true" className="size-5" />
-              تحدث معنا عن مشروعك
+              تواصل مع فريق الخولى{" "}
             </a>
 
             <Link
-              href={routes.links}
+              href={"/products"}
               className="inline-flex min-h-12 items-center justify-center gap-3 rounded-control border border-white/25 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur-sm transition-colors duration-200 hover:border-white/50 hover:bg-white/10"
             >
-              وسائل التواصل والفروع
+              استكشف منتجاتنا
               <FaArrowLeft aria-hidden="true" className="size-4" />
             </Link>
           </div>

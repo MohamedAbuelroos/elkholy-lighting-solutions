@@ -351,11 +351,12 @@ body,
 }
 
 :root[data-theme="light"] .light-trails {
+  color: #a87916;
   opacity: 0.35;
 }
 
 :root[data-theme="light"] .light-trails-glow {
-  opacity: 0.08;
+  opacity: 0.28;
 }
 
 @media (prefers-reduced-motion: reduce) {

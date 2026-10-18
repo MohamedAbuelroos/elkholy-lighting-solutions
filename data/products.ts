@@ -42,7 +42,7 @@ export const products = [
     ],
     is_active: true,
     is_featured: true,
-    is_popular: true,
+    is_popular: false,
     sort_order: 2,
   },
   {
@@ -55,7 +55,7 @@ export const products = [
       "منتج تجريبي لمعاينة التصميم. تُضاف تفاصيل التوافق والتشغيل لاحقًا.",
     description_en: null,
     sku: "DEMO-003",
-    price: null,
+    price: 480,
     images: [
       {
         src: "/images/categories/lighting.jpg",
@@ -77,7 +77,7 @@ export const products = [
       "منتج تجريبي لمعاينة التصميم. تُضاف القدرة والمواصفات الفعلية لاحقًا.",
     description_en: null,
     sku: "DEMO-004",
-    price: null,
+    price: 2150,
     images: [
       {
         src: "/images/categories/electric.jpg",
@@ -100,7 +100,7 @@ export const products = [
       "منتج تجريبي لمعاينة التصميم. تُضاف القدرة والمواصفات الفعلية لاحقًا.",
     description_en: null,
     sku: "DEMO-005",
-    price: null,
+    price: 1950,
     images: [
       {
         src: "/images/categories/lighting.jpg",
@@ -122,7 +122,7 @@ export const products = [
       "منتج تجريبي لمعاينة التصميم. تُضاف القدرة والمواصفات الفعلية لاحقًا.",
     description_en: null,
     sku: "DEMO-006",
-    price: null,
+    price: 250,
     images: [
       {
         src: "/images/categories/electric.jpg",
@@ -177,5 +177,27 @@ export const products = [
     is_featured: true,
     is_popular: true,
     sort_order: 8,
+  },
+  {
+    id: "demo-product-09",
+    slug: "home-sound-system-five",
+    category_id: "a1000000-0000-4000-8000-000000000009",
+    name_ar: "نظام صوتي للمساحات الداخلية",
+    name_en: null,
+    description_ar:
+      "منتج تجريبي لمعاينة التصميم. تُضاف القدرة والمواصفات الفعلية لاحقًا.",
+    description_en: null,
+    sku: "DEMO-009",
+    price: null,
+    images: [
+      {
+        src: "/images/categories/lighting.jpg",
+        alt: "صورة مؤقتة لقسم الأنظمة الصوتية",
+      },
+    ],
+    is_active: true,
+    is_featured: true,
+    is_popular: true,
+    sort_order: 9,
   },
 ] satisfies Product[];
