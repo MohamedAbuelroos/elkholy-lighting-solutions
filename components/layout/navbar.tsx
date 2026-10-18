@@ -89,6 +89,8 @@ export function Navbar() {
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <a
             href={contactHref}
+            target="_blank"
+            rel="noopener noreferrer"
             className="navbar-control hidden min-h-11 items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors lg:inline-flex"
           >
             <FaWhatsapp aria-hidden="true" className="size-5" />

@@ -1,3 +1,4 @@
+
 type LightTrailsProps = {
   variant?: "flow" | "arc";
   className?: string;

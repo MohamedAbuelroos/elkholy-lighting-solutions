@@ -46,10 +46,13 @@ export function FeaturedProducts() {
 
             <Link
               href={routes.products}
-              className="mt-4 inline-flex min-h-11 items-center justify-center gap-3 rounded-control border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-on-primary"
+              className="group mt-4 inline-flex min-h-11 items-center gap-3 rounded-full border border-primary/50 px-5 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-[#05070B]"
             >
               استكشف جميع المنتجات
-              <FaArrowLeft aria-hidden="true" className="size-3.5" />
+              <FaArrowLeft
+                aria-hidden="true"
+                className="size-3.5 transition-transform duration-300 group-hover:-translate-x-1"
+              />
             </Link>
           </div>
         </div>
