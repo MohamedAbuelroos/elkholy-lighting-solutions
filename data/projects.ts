@@ -43,7 +43,7 @@ export const projects = [
       "تصوّر للجمع بين الإضاءة المعلّقة والمخفية لإبراز التصميم وتوفير أجواء متنوعة.",
     category_ar: "حلول إضاءة متكاملة",
     image: {
-      src: "/images/hero-lighting.jpg",
+      src: "/images/hero - Copy.jpg",
       alt: "صورة توضيحية لوحدات إضاءة داخلية",
     },
     is_active: true,
