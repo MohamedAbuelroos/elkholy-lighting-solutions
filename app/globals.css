@@ -364,3 +364,11 @@ body,
     transition: none;
   }
 }
+
+.testimonials-track {
+  scrollbar-width: none;
+}
+
+.testimonials-track::-webkit-scrollbar {
+  display: none;
+}
