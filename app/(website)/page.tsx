@@ -7,6 +7,7 @@ import { WhyElkholy } from "@/components/home/why-elkholy/why-elkholy";
 import { ContactCTA } from "@/components/home/contact-cta/contact-cta";
 import { StatsSection } from "@/components/home/stats/stats-section";
 import { ProjectsSection } from "@/components/home/projects/projects-section";
+import { TestimonialsSection } from "@/components/home/testimonials/testimonials-section";
 
 export default function HomePage() {
   return (
@@ -19,6 +20,7 @@ export default function HomePage() {
       <ProjectsSection />
       <WhyElkholy />
       <StatsSection />
+      <TestimonialsSection />
       <ContactCTA />
     </>
   );
