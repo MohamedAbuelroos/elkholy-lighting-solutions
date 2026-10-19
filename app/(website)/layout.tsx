@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 
 type WebsiteLayoutProps = {
   children: ReactNode;
@@ -26,6 +26,7 @@ export default function WebsiteLayout({ children }: WebsiteLayoutProps) {
       </main>
 
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }
