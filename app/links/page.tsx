@@ -334,7 +334,10 @@ export default function LinksPage() {
             </div>
 
             {/* Address */}
-            <div className="rounded-[24px] border border-white/[0.07] bg-white/[0.025] p-5">
+            <div
+              id="branches"
+              className="rounded-[24px] border border-white/[0.07] bg-white/[0.025] p-5"
+            >
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[16px] border border-[#D6A744]/10 bg-[#D6A744]/[0.07] text-lg text-[#D6A744]">
                   <FaLocationDot />

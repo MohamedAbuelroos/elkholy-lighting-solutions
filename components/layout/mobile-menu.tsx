@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaBars, FaXmark } from "react-icons/fa6";
+import { routes } from "@/config/routes";
+import { ProductsNavigation } from "@/components/layout/products-navigation";
 
 type NavigationItem = {
   readonly label: string;
@@ -38,7 +40,7 @@ function MobileMenu({ items, contactHref }: MobileMenuProps) {
       }
     }
 
-    const desktopQuery = window.matchMedia("(min-width: 1024px)");
+    const desktopQuery = window.matchMedia("(min-width: 1280px)");
 
     function handleBreakpointChange(event: MediaQueryListEvent) {
       if (event.matches) setIsOpen(false);
@@ -56,7 +58,7 @@ function MobileMenu({ items, contactHref }: MobileMenuProps) {
   }, [isOpen]);
 
   return (
-    <div ref={containerRef} className="lg:hidden">
+    <div ref={containerRef} className="xl:hidden">
       <button
         ref={triggerRef}
         type="button"
@@ -81,24 +83,38 @@ function MobileMenu({ items, contactHref }: MobileMenuProps) {
         className={`absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-border bg-surface text-foreground shadow-xl ${
           isOpen ? "mobile-navigation-open" : "mobile-navigation-closed"
         }`}
+        onClick={(event) => {
+          if (event.target instanceof Element && event.target.closest("a")) {
+            setIsOpen(false);
+          }
+        }}
       >
         <div className="site-container py-5">
           <ul className="space-y-1">
             {items.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block rounded-control px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-elevated hover:text-primary"
-                >
-                  {item.label}
-                </Link>
+                {item.href === routes.products ? (
+                  <ProductsNavigation
+                    key={isOpen ? "menu-open" : "menu-closed"}
+                    mobile
+                  />
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className="block rounded-control px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-elevated hover:text-primary"
+                  >
+                    {item.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
 
           <a
             href={contactHref}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setIsOpen(false)}
             className="mt-4 flex min-h-12 items-center justify-center rounded-control bg-primary px-5 font-semibold text-on-primary transition-colors hover:bg-primary-hover"
           >

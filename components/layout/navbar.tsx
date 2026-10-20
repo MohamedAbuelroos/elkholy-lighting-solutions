@@ -5,18 +5,14 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
-import { routes } from "@/config/routes";
+import { mainNavigation, routes } from "@/config/routes";
+import { ProductsNavigation } from "@/components/layout/products-navigation";
 import { siteConfig } from "@/config/site";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 import MobileMenu from "@/components/layout/mobile-menu";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { usePathname } from "next/navigation";
 import { FavoritesLink } from "@/components/layout/favorites-link";
-
-const availableNavigation = [
-  { label: "الرئيسية", href: routes.home },
-  { label: "وسائل التواصل", href: routes.links },
-] as const;
 
 function subscribeToScroll(onChange: () => void) {
   window.addEventListener("scroll", onChange, { passive: true });
@@ -61,10 +57,10 @@ export function Navbar() {
             alt="Elkholy Logo"
             width={74}
             height={74}
-            className="size-16 shrink-0 rounded-control object-contain sm:size-18"
+            className="size-11 shrink-0 rounded-control object-contain sm:size-18"
           />
 
-          <div dir="ltr" className="min-w-0 text-start">
+          <div dir="ltr" className="hidden min-w-0 text-start sm:block">
             <span className="navbar-brand block text-sm font-semibold tracking-[0.18em] sm:text-lg">
               ELKHOLY
             </span>
@@ -77,17 +73,22 @@ export function Navbar() {
 
         <nav
           aria-label="التنقل الرئيسي"
-          className="hidden items-center gap-8 lg:flex"
+          className="hidden items-center gap-5 xl:flex"
         >
-          {availableNavigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="navbar-link py-3 text-sm font-medium transition-colors"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {mainNavigation.map((item) =>
+            item.href === routes.products ? (
+              <ProductsNavigation key={item.href} />
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={pathname === item.href ? "page" : undefined}
+                className="navbar-link whitespace-nowrap py-3 text-sm font-medium transition-colors"
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -95,16 +96,14 @@ export function Navbar() {
             href={contactHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="navbar-control hidden min-h-11 items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors lg:inline-flex"
+            className="navbar-control hidden min-h-11 items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors xl:inline-flex"
           >
             <FaWhatsapp aria-hidden="true" className="size-5" />
             تواصل معنا
           </a>
           <FavoritesLink />
-
           <ThemeToggle />
-
-          <MobileMenu items={availableNavigation} contactHref={contactHref} />
+          <MobileMenu items={mainNavigation} contactHref={contactHref} />{" "}
         </div>
       </div>
     </header>

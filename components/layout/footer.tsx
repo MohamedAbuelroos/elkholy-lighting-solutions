@@ -1,28 +1,43 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
-import { FaArrowUp, FaEnvelope } from "react-icons/fa6";
+import {
+  FaArrowLeft,
+  FaArrowUp,
+  FaEnvelope,
+  FaLocationDot,
+} from "react-icons/fa6";
 
-import { routes } from "@/config/routes";
+import { getCategoryPath, mainNavigation, routes } from "@/config/routes";
 import { siteConfig } from "@/config/site";
+import { categories } from "@/data/categories";
 import { company } from "@/data/company";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 
-const navigation = [
-  { label: "الرئيسية", href: routes.home },
-  { label: "أقسام المنتجات", href: "/#categories" },
-  { label: "منتجات مختارة", href: "/#featured-products" },
-  { label: "حلول الخولي", href: "/#solutions" },
-  { label: "وسائل التواصل والفروع", href: routes.links },
-] as const;
+const footerNavigation = [
+  ...mainNavigation,
+  { label: "المفضلة", href: routes.favorites },
+];
+
+const rootCategories = categories
+  .filter((category) => category.is_active && category.parent_id === null)
+  .sort((first, second) => first.sort_order - second.sort_order);
+
+const footerLinkClass =
+  "inline-flex min-h-10 items-center text-sm leading-6 text-muted transition-colors hover:text-primary";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-surface">
+    <footer className="relative border-t border-border bg-surface">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 mx-auto h-px max-w-lg bg-gradient-to-r from-transparent via-primary/40 to-transparent"
+      />
+
       <div className="site-container">
-        <div className="grid gap-10 py-12 sm:py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-16">
+        <div className="grid gap-9 py-12 sm:grid-cols-2 sm:py-14 lg:grid-cols-[1.2fr_0.8fr_1fr_1.1fr] lg:gap-8">
           {/* Brand */}
-          <div className="max-w-sm">
+          <div>
             <Link
               href={routes.home}
               aria-label={`${company.nameAr} — الرئيسية`}
@@ -31,23 +46,23 @@ export function Footer() {
               <Image
                 src={siteConfig.logo.src}
                 alt=""
-                width={56}
-                height={56}
-                className="size-14 rounded-control object-contain"
+                width={64}
+                height={64}
+                className="size-16 shrink-0 rounded-control object-contain"
               />
 
               <div dir="ltr" className="text-start">
-                <span className="block text-lg font-semibold tracking-[0.18em] text-primary">
+                <span className="block text-base font-semibold tracking-[0.18em] text-primary">
                   ELKHOLY
                 </span>
 
-                <span className="mt-1 block text-[9px] tracking-[0.14em] text-muted">
+                <span className="mt-1 block text-[9px] tracking-[0.12em] text-muted">
                   LIGHTING SOLUTIONS
                 </span>
               </div>
             </Link>
 
-            <p className="mt-5 text-sm leading-8 text-muted">
+            <p className="mt-5 max-w-xs text-sm leading-8 text-muted">
               {company.tagline}
             </p>
 
@@ -55,27 +70,24 @@ export function Footer() {
               href={getPrimaryWhatsAppHref()}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="تواصل مع الخولي عبر واتساب — يفتح في تبويب جديد"
-              className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-hover"
+              aria-label="تحدث مع فريق الخولي عبر واتساب — يفتح في تبويب جديد"
+              className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-control border border-primary/25 bg-primary/5 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-on-primary"
             >
-              <FaWhatsapp aria-hidden="true" className="size-5" />
+              <FaWhatsapp aria-hidden="true" className="size-4" />
               تحدث مع فريق الخولي
             </a>
           </div>
 
-          {/* Navigation */}
+          {/* Website navigation */}
           <nav aria-label="روابط تذييل الموقع">
             <h2 className="mb-4 text-sm font-semibold text-foreground">
               اكتشف الخولي
             </h2>
 
             <ul className="space-y-1">
-              {navigation.map((item) => (
+              {footerNavigation.map((item) => (
                 <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="inline-flex min-h-10 items-center text-sm text-muted transition-colors hover:text-primary"
-                  >
+                  <Link href={item.href} className={footerLinkClass}>
                     {item.label}
                   </Link>
                 </li>
@@ -83,19 +95,39 @@ export function Footer() {
             </ul>
           </nav>
 
-          {/* Business information */}
-          <div>
+          {/* Product categories */}
+          <nav aria-label="فئات المنتجات في تذييل الموقع">
+            <h2 className="mb-4 text-sm font-semibold text-foreground">
+              فئات المنتجات
+            </h2>
+
+            <ul className="space-y-1">
+              {rootCategories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    href={getCategoryPath(category.slug)}
+                    className={footerLinkClass}
+                  >
+                    {category.name_ar}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Contact information */}
+          <div className="min-w-0">
             <h2 className="mb-4 text-sm font-semibold text-foreground">
               سعداء بتواصلكم
             </h2>
 
             <a
               href={`mailto:${company.email}`}
-              className="inline-flex min-h-10 max-w-full items-center gap-3 text-sm text-muted transition-colors hover:text-primary"
+              className="inline-flex min-h-10 max-w-full items-center gap-2 text-xs text-muted transition-colors hover:text-primary"
             >
               <FaEnvelope
                 aria-hidden="true"
-                className="size-4 shrink-0 text-primary"
+                className="size-3.5 shrink-0 text-primary"
               />
 
               <span dir="ltr" className="break-all">
@@ -103,7 +135,7 @@ export function Footer() {
               </span>
             </a>
 
-            <div className="mt-5 border-t border-border pt-5">
+            <div className="mt-4 border-t border-border pt-4">
               <h3 className="text-xs font-medium text-foreground">
                 مواعيد العمل
               </h3>
@@ -116,17 +148,19 @@ export function Footer() {
             </div>
 
             <Link
-              href={routes.links}
-              className="mt-4 inline-flex min-h-10 items-center text-sm font-medium text-primary transition-colors hover:text-primary-hover"
+              href={routes.branches}
+              className="group mt-4 inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-primary transition-colors hover:text-primary-hover"
             >
-              عناوين الفروع ووسائل التواصل
+              <FaLocationDot aria-hidden="true" className="size-3.5 shrink-0" />
+              عناوين معارضنا
+              <FaArrowLeft aria-hidden="true" className="size-3 shrink-0" />
             </Link>
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Copyright and back to top */}
         <div className="flex flex-col items-center justify-between gap-3 border-t border-border py-5 sm:flex-row">
-          <p className="text-center text-xs leading-6 text-muted sm:text-start">
+          <p className="text-center text-[11px] leading-6 text-muted sm:text-start">
             © {new Date().getFullYear()} {company.nameAr}. جميع الحقوق محفوظة.
           </p>
 
@@ -135,7 +169,9 @@ export function Footer() {
             className="inline-flex min-h-10 items-center gap-2 text-xs text-muted transition-colors hover:text-primary"
           >
             العودة للأعلى
-            <FaArrowUp aria-hidden="true" className="size-3" />
+            <span className="flex size-8 items-center justify-center rounded-full border border-border">
+              <FaArrowUp aria-hidden="true" className="size-3" />
+            </span>
           </a>
         </div>
       </div>
