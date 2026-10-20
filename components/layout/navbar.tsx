@@ -10,6 +10,7 @@ import { siteConfig } from "@/config/site";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 import MobileMenu from "@/components/layout/mobile-menu";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { usePathname } from "next/navigation";
 
 const availableNavigation = [
   { label: "الرئيسية", href: routes.home },
@@ -38,12 +39,14 @@ export function Navbar() {
     getScrollSnapshot,
     getServerScrollSnapshot,
   );
+  const pathname = usePathname();
+  const showBackground = pathname !== routes.home || isScrolled;
 
   const contactHref = getPrimaryWhatsAppHref();
 
   return (
     <header
-      data-scrolled={isScrolled}
+      data-scrolled={showBackground}
       className="site-navbar fixed inset-x-0 top-0 z-40"
     >
       <div className="site-container relative flex h-20 items-center justify-between gap-3 lg:h-22">

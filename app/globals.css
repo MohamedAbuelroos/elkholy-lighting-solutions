@@ -372,3 +372,33 @@ body,
 .testimonials-track::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes catalog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.catalog-enter {
+  animation: catalog-enter 480ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-enter {
+    animation: none;
+  }
+}
+
+.catalog-search-input:focus-visible {
+  outline: none;
+}
+
+.catalog-search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}

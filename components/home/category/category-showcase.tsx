@@ -2,9 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
 
-import { company } from "@/data/company";
 import { getRootCategories } from "@/lib/queries/categories";
-import { buildWhatsAppUrl, getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 
 export async function CategoryShowcase() {
   const categories = await getRootCategories();
@@ -12,18 +10,6 @@ export async function CategoryShowcase() {
   if (categories.length === 0) return null;
 
   const visibleCategories = categories.slice(0, 5);
-
-  const officialContact = company.whatsapp.find(
-    (contact) => contact.name === company.name,
-  );
-
-  const getInquiryHref = (categoryName: string) =>
-    officialContact
-      ? buildWhatsAppUrl(
-          officialContact.number,
-          `مرحبًا، أود الاستفسار عن ${categoryName} من خلال موقع الخولي.`,
-        )
-      : getPrimaryWhatsAppHref();
 
   return (
     <section
@@ -45,11 +31,10 @@ export async function CategoryShowcase() {
               const isFeatured = index === 0;
 
               return (
-                <a
+                <Link
                   key={category.id}
-                  target="_blank"
-                  href={getInquiryHref(category.name_ar)}
-                  aria-label={`استفسر عن ${category.name_ar}`}
+                  href={`/products?category=${encodeURIComponent(category.slug)}`}
+                  aria-label={`استعرض منتجات ${category.name_ar}`}
                   className={`group relative isolate flex min-h-0 flex-col justify-end overflow-hidden rounded-card border border-border/80 bg-surface transition-colors duration-300 hover:border-primary/60 ${
                     isFeatured
                       ? "col-span-2 min-h-[280px] sm:min-h-[340px] lg:col-span-1 lg:row-span-2 lg:min-h-[420px]"
@@ -130,7 +115,7 @@ export async function CategoryShowcase() {
                       </span>
                     </div>
                   </div>
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -159,7 +144,7 @@ export async function CategoryShowcase() {
             </p>
 
             <Link
-              href="/categories"
+              href="/products"
               className="group mt-7 inline-flex min-h-11 items-center gap-3 rounded-full border border-primary/50 px-5 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-[#05070B]"
             >
               جميع الفئات
