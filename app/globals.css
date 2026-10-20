@@ -402,3 +402,73 @@ body,
 .catalog-search-input::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
+
+/* Standalone links page theme button */
+.links-theme-toggle .navbar-control {
+  color: var(--foreground);
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.links-theme-toggle .navbar-control:hover {
+  background: var(--surface-elevated);
+}
+
+/* Contact sheet */
+.contact-sheet[open] {
+  animation: contact-sheet-in 240ms ease-out both;
+}
+
+.contact-sheet::backdrop {
+  background: rgb(0 0 0 / 60%);
+  backdrop-filter: blur(5px);
+  animation: contact-backdrop-in 200ms ease-out both;
+}
+
+.contact-sheet[data-closing="true"] {
+  animation: contact-sheet-out 200ms ease-in both;
+}
+
+.contact-sheet[data-closing="true"]::backdrop {
+  animation: contact-backdrop-out 200ms ease-in both;
+}
+
+@keyframes contact-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contact-sheet-out {
+  to {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+}
+
+@keyframes contact-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contact-backdrop-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-sheet[open],
+  .contact-sheet::backdrop {
+    animation: none;
+  }
+}

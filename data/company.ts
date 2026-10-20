@@ -56,13 +56,13 @@ export const company = {
     {
       name: "معرض الخولي - الفرع الأول",
       address: "البحيرة - دمنهور - شارع 23 يوليو - بجوار المحكمة القديمة",
-      maps: "#",
+      maps: "https://maps.app.goo.gl/Q9idP8bbjdrM3DDu9",
     },
     {
       name: "معرض الخولي - الفرع الثاني",
       address:
         "البحيرة - دمنهور - شارع عبدالسلام الشاذلى برج ايفي - امام سور النادى الاجتماعى",
-      maps: "#",
+      maps: "https://maps.app.goo.gl/L2tYMQjgSdm1RU8C6",
     },
   ],
 
