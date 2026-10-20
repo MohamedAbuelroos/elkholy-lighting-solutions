@@ -231,3 +231,38 @@ export async function getCatalog({
     invalidSubcategory,
   };
 }
+
+export async function getProductsByIds(ids: string[]): Promise<
+  {
+    product: Product;
+    categoryName: string;
+  }[]
+> {
+  const activeCategories = new Map(
+    categories
+      .filter((category) => category.is_active)
+      .map((category) => [category.id, category]),
+  );
+
+  const availableProducts = new Map(
+    products
+      .filter(
+        (product) =>
+          product.is_active && activeCategories.has(product.category_id),
+      )
+      .map((product) => [product.id, product]),
+  );
+
+  return [...new Set(ids)].flatMap((id) => {
+    const product = availableProducts.get(id);
+    if (!product) return [];
+
+    return [
+      {
+        product,
+        categoryName:
+          activeCategories.get(product.category_id)?.name_ar ?? "منتجات الخولي",
+      },
+    ];
+  });
+}

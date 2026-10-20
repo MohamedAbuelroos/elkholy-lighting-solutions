@@ -11,6 +11,7 @@ import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 import MobileMenu from "@/components/layout/mobile-menu";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { usePathname } from "next/navigation";
+import { FavoritesLink } from "@/components/layout/favorites-link";
 
 const availableNavigation = [
   { label: "الرئيسية", href: routes.home },
@@ -99,6 +100,7 @@ export function Navbar() {
             <FaWhatsapp aria-hidden="true" className="size-5" />
             تواصل معنا
           </a>
+          <FavoritesLink />
 
           <ThemeToggle />
 
