@@ -70,7 +70,7 @@ export function CatalogHero({
           <div key={transitionKey} className="catalog-enter">
             <h1
               id="catalog-title"
-              className="text-3xl font-semibold leading-[1.4] sm:text-4xl lg:text-5xl"
+              className="text-3xl font-bold leading-[1.4] sm:text-4xl lg:text-5xl"
             >
               {title}
             </h1>

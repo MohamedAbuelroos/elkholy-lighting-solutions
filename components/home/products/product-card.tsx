@@ -4,6 +4,7 @@ import { FaImage, FaStar } from "react-icons/fa6";
 
 import { getProductPath } from "@/config/routes";
 import type { Product } from "@/types/product";
+import { FavoriteButton } from "@/components/products/favorite-button";
 
 type ProductCardProps = {
   product: Product;
@@ -50,6 +51,11 @@ export function ProductCard({ product, categoryName }: ProductCardProps) {
             شائع
           </span>
         )}
+        <FavoriteButton
+          productId={product.id}
+          productName={product.name_ar}
+          className="absolute end-2.5 top-2.5 z-10"
+        />
       </div>
 
       {/* Information */}
