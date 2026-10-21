@@ -53,7 +53,7 @@ export function ContactCTA() {
               </a>
 
               <Link
-                href={routes.links}
+                href={`${routes.links}#branches`}
                 className="inline-flex min-h-12 items-center justify-center gap-3 rounded-control border border-border bg-surface px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-surface-elevated"
               >
                 <FaLocationDot

@@ -38,20 +38,21 @@ export function Hero() {
               aria-hidden="true"
               className="h-px w-8 shrink-0 bg-[#E2B858]/70"
             />
-            إضاءة · تشطيبات كهربائية · أنظمة ذكية
+            تأسيس · تشطيبات كهربائية · أنظمة ذكية
           </p>
 
           <h1
             id="hero-title"
             className="text-[clamp(2.25rem,5vw,4.25rem)] font-bold leading-[1.3] tracking-tight"
           >
-            إضاءة تمنح مساحتك
-            <span className="mt-2 block text-[#E2B858]">طابعًا يليق بك.</span>
+            الخولى
+            <span className="mt-2 block text-[#E2B858]">للإضاءة الحديثة</span>
           </h1>
 
           <p className="mt-6 max-w-md text-sm leading-8 text-white/75 sm:text-base sm:leading-8">
-            من أول تفصيلة إضاءة إلى حلول منزلك الذكي، نساعدك تختار ما يجمع بين
-            جمال التصميم وراحة الاستخدام.
+            من نجفة تلفت الأنظار لتفاصيل تكمل جمال بيتك، اكتشف مع الخولي
+            اختيارات الإضاءة والتشطيبات الكهربائية والأنظمة الذكية، وخلي كل
+            اختيار على ذوقك.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

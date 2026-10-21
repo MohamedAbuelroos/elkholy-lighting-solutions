@@ -12,7 +12,7 @@ export const siteConfig = {
     alt: company.nameAr,
   },
   hero: {
-    src: "/images/hero - Copy.jpg",
+    src: "/images/elkholyHero.png",
     alt: "صورة توضيحية لمعرض الخولي للإضاءة والأنظمة الذكية",
   },
   defaultWhatsAppMessage:
