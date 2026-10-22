@@ -45,14 +45,14 @@ export function Hero() {
             id="hero-title"
             className="text-[clamp(2.25rem,5vw,4.25rem)] font-bold leading-[1.3] tracking-tight"
           >
-            الخولى
-            <span className="mt-2 block text-[#E2B858]">للإضاءة الحديثة</span>
+            نوّر بيتك
+            <span className="mt-2 block text-[#E2B858]">وكمّل حكاية ذوقك</span>
           </h1>
 
           <p className="mt-6 max-w-md text-sm leading-8 text-white/75 sm:text-base sm:leading-8">
-            من نجفة تلفت الأنظار لتفاصيل تكمل جمال بيتك، اكتشف مع الخولي
-            اختيارات الإضاءة والتشطيبات الكهربائية والأنظمة الذكية، وخلي كل
-            اختيار على ذوقك.
+            كل تفصيلة في بيتك تستاهل اختيار يليق بيها. مع الخولي، اكتشف إضاءة
+            تبرز جمال المكان، وتشطيبات كهربائية تكمل أناقته، وحلول ذكية تضيف
+            راحة ليومك.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
