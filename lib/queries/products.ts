@@ -1,33 +1,45 @@
-import { categories } from "@/data/categories";
-import { products } from "@/data/products";
+import "server-only";
+
+import { getActiveCategories } from "@/lib/queries/categories";
+import {
+  fetchProductsByIds,
+  toProduct,
+} from "@/lib/queries/product-selections";
+import { createCatalogClient } from "@/lib/supabase/catalog-client";
+
 import type { Category } from "@/types/category";
 import type { Product } from "@/types/product";
 
 export type CatalogSort = "default" | "price-asc" | "price-desc";
 
 export const CATALOG_PAGE_SIZE = 12;
+
 type GetCatalogInput = {
   categorySlug?: string;
+  subcategorySlug?: string;
   sort?: CatalogSort;
   page?: number;
   query?: string;
-  subcategorySlug?: string;
 };
 
 type CatalogResult = {
   products: Product[];
   categories: Category[];
+
   selectedCategory: Category | null;
   invalidCategory: boolean;
+
+  subcategories: Category[];
+  selectedSubcategory: Category | null;
+  invalidSubcategory: boolean;
+
   categoryCounts: Record<string, number>;
   totalProducts: number;
+
   totalResults: number;
   visibleCount: number;
   hasMore: boolean;
   page: number;
-  subcategories: Category[];
-  selectedSubcategory: Category | null;
-  invalidSubcategory: boolean;
 };
 
 function normalizeSearch(value: string): string {
@@ -40,6 +52,34 @@ function normalizeSearch(value: string): string {
     .trim();
 }
 
+function escapeSearchPattern(value: string): string {
+  // Treat %, _ and backslash as literal search characters.
+  return value.replace(/[\\%_]/g, "\\$&");
+}
+
+function collectCategoryIds(rootId: string, categories: Category[]): string[] {
+  const ids = new Set<string>([rootId]);
+
+  let changed = true;
+
+  while (changed) {
+    changed = false;
+
+    for (const category of categories) {
+      if (
+        category.parent_id &&
+        ids.has(category.parent_id) &&
+        !ids.has(category.id)
+      ) {
+        ids.add(category.id);
+        changed = true;
+      }
+    }
+  }
+
+  return [...ids];
+}
+
 export async function getCatalog({
   categorySlug,
   subcategorySlug,
@@ -47,18 +87,16 @@ export async function getCatalog({
   page = 1,
   query = "",
 }: GetCatalogInput = {}): Promise<CatalogResult> {
-  const activeCategories = categories
-    .filter((category) => category.is_active)
-    .sort((first, second) => first.sort_order - second.sort_order);
+  const categories = await getActiveCategories();
 
   const selectedCategory = categorySlug
-    ? (activeCategories.find((category) => category.slug === categorySlug) ??
-      null)
+    ? (categories.find((category) => category.slug === categorySlug) ?? null)
     : null;
 
   const invalidCategory = Boolean(categorySlug && !selectedCategory);
+
   const subcategories = selectedCategory
-    ? activeCategories.filter(
+    ? categories.filter(
         (category) => category.parent_id === selectedCategory.id,
       )
     : [];
@@ -70,165 +108,155 @@ export async function getCatalog({
 
   const invalidSubcategory = Boolean(subcategorySlug && !selectedSubcategory);
 
-  const selectedSubcategoryIds = new Set<string>();
+  const selectedRoot = selectedSubcategory ?? selectedCategory;
 
-  if (selectedSubcategory) {
-    selectedSubcategoryIds.add(selectedSubcategory.id);
+  const categoryIds = selectedRoot
+    ? collectCategoryIds(selectedRoot.id, categories)
+    : categories.map((category) => category.id);
 
-    let changed = true;
+  const searchTerms = normalizeSearch(query.slice(0, 100))
+    .split(/\s+/)
+    .filter(Boolean);
 
-    while (changed) {
-      changed = false;
+  const supabase = createCatalogClient();
 
-      for (const category of activeCategories) {
-        if (
-          category.parent_id &&
-          selectedSubcategoryIds.has(category.parent_id) &&
-          !selectedSubcategoryIds.has(category.id)
-        ) {
-          selectedSubcategoryIds.add(category.id);
-          changed = true;
-        }
-      }
-    }
-  }
-  // Include active subcategories when a parent category is selected.
-  const selectedIds = new Set<string>();
+  /**
+   * The same filters are used for:
+   * 1. Counting matching products.
+   * 2. Fetching the requested product identifiers.
+   */
+  function buildQuery() {
+    let request = supabase
+      .from("products")
+      .select(
+        `
+        *,
+        product_images (
+          id,
+          src,
+          alt,
+          sort_order
+        )
+      `,
+        { count: "exact" },
+      )
+      .eq("is_active", true)
+      .in("category_id", categoryIds);
 
-  if (selectedCategory) {
-    selectedIds.add(selectedCategory.id);
-
-    let addedCategory = true;
-
-    while (addedCategory) {
-      addedCategory = false;
-
-      for (const category of activeCategories) {
-        if (
-          category.parent_id &&
-          selectedIds.has(category.parent_id) &&
-          !selectedIds.has(category.id)
-        ) {
-          selectedIds.add(category.id);
-          addedCategory = true;
-        }
-      }
-    }
-  }
-
-  const activeCategoryIds = new Set(
-    activeCategories.map((category) => category.id),
-  );
-
-  const activeProducts = products.filter(
-    (product) =>
-      product.is_active && activeCategoryIds.has(product.category_id),
-  );
-
-  const categoryCounts: Record<string, number> = {};
-
-  for (const category of activeCategories) {
-    const includedIds = new Set<string>([category.id]);
-
-    let changed = true;
-
-    while (changed) {
-      changed = false;
-
-      for (const child of activeCategories) {
-        if (
-          child.parent_id &&
-          includedIds.has(child.parent_id) &&
-          !includedIds.has(child.id)
-        ) {
-          includedIds.add(child.id);
-          changed = true;
-        }
-      }
+    for (const term of searchTerms) {
+      request = request.ilike("search_text", `%${escapeSearchPattern(term)}%`);
     }
 
-    categoryCounts[category.id] = activeProducts.filter((product) =>
-      includedIds.has(product.category_id),
-    ).length;
+    if (sort === "price-asc" || sort === "price-desc") {
+      request = request.order("price", {
+        ascending: sort === "price-asc",
+        nullsFirst: false,
+      });
+    }
+
+    return request
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true });
   }
 
-  const searchTerms = normalizeSearch(query).split(/\s+/).filter(Boolean);
-  const matchingProducts =
-    invalidCategory || invalidSubcategory
-      ? []
-      : activeProducts.filter((product) => {
-          const matchesCategory =
-            !selectedCategory || selectedIds.has(product.category_id);
-
-          const matchesSubcategory =
-            !selectedSubcategory ||
-            selectedSubcategoryIds.has(product.category_id);
-
-          const searchableText = normalizeSearch(
-            [product.name_ar, product.name_en ?? "", product.sku ?? ""].join(
-              " ",
-            ),
-          );
-
-          const matchesSearch = searchTerms.every((term) =>
-            searchableText.includes(term),
-          );
-
-          return matchesCategory && matchesSubcategory && matchesSearch;
-        });
-  matchingProducts.sort((first, second) => {
-    if (sort === "default") {
-      return (
-        first.sort_order - second.sort_order ||
-        first.id.localeCompare(second.id)
-      );
-    }
-
-    // Products without a price always come last.
-    if (first.price === null && second.price !== null) return 1;
-    if (first.price !== null && second.price === null) return -1;
-
-    if (first.price !== null && second.price !== null) {
-      const difference =
-        sort === "price-asc"
-          ? first.price - second.price
-          : second.price - first.price;
-
-      if (difference !== 0) return difference;
-    }
-
-    return (
-      first.sort_order - second.sort_order || first.id.localeCompare(second.id)
-    );
-  });
-
-  const totalResults = matchingProducts.length;
-
-  const totalPages = Math.max(1, Math.ceil(totalResults / CATALOG_PAGE_SIZE));
+  const canSearch =
+    !invalidCategory && !invalidSubcategory && categoryIds.length > 0;
 
   const requestedPage = Number.isSafeInteger(page) && page > 0 ? page : 1;
 
+  // Keep requests below the usual API row limit.
+  // Normal catalog use starts with only 12 products.
+  const batchSize = 500;
+
+  const initialLimit = Math.min(requestedPage * CATALOG_PAGE_SIZE, batchSize);
+
+  const [countsResponse, productsResponse] = await Promise.all([
+    supabase.rpc("get_catalog_category_counts"),
+
+    canSearch
+      ? buildQuery().range(0, initialLimit - 1)
+      : Promise.resolve({
+          data: null,
+          count: 0,
+          error: null,
+        }),
+  ]);
+
+  if (countsResponse.error || productsResponse.error) {
+    console.error("Failed to load catalog:", {
+      categories: countsResponse.error,
+      products: productsResponse.error,
+    });
+
+    throw new Error("تعذّر تحميل نتائج المنتجات.");
+  }
+
+  const countRows = countsResponse.data ?? [];
+
+  const categoryCounts: Record<string, number> = {};
+
+  for (const row of countRows) {
+    categoryCounts[row.category_id] = Number(row.product_count);
+  }
+
+  const totalProducts = Number(countRows[0]?.total_products ?? 0);
+
+  const totalResults = productsResponse.count ?? 0;
+
+  const totalPages = Math.max(1, Math.ceil(totalResults / CATALOG_PAGE_SIZE));
+
   const currentPage = Math.min(requestedPage, totalPages);
 
-  const visibleProducts = matchingProducts.slice(
-    0,
+  const requestedCount = Math.min(
     currentPage * CATALOG_PAGE_SIZE,
+    totalResults,
   );
 
+  const visibleProducts = (productsResponse.data ?? [])
+    .slice(0, requestedCount)
+    .map(toProduct);
+
+  // Only needed if the visitor has expanded beyond 500 products.
+  if (canSearch && requestedCount > initialLimit) {
+    for (
+      let offset = initialLimit;
+      offset < requestedCount;
+      offset += batchSize
+    ) {
+      const lastIndex = Math.min(offset + batchSize - 1, requestedCount - 1);
+
+      const { data, error } = await buildQuery().range(offset, lastIndex);
+
+      if (error) {
+        console.error("Failed to load additional catalog products:", {
+          code: error.code,
+          message: error.message,
+        });
+
+        throw new Error("تعذّر تحميل المزيد من المنتجات.");
+      }
+
+      visibleProducts.push(...(data ?? []).map(toProduct));
+    }
+  }
   return {
     products: visibleProducts,
-    categories: activeCategories,
+    categories,
+
     selectedCategory,
     invalidCategory,
-    categoryCounts,
-    totalProducts: activeProducts.length,
-    totalResults,
-    visibleCount: visibleProducts.length,
-    hasMore: visibleProducts.length < totalResults,
-    page: currentPage,
+
     subcategories,
     selectedSubcategory,
     invalidSubcategory,
+
+    categoryCounts,
+    totalProducts,
+
+    totalResults,
+    visibleCount: visibleProducts.length,
+    hasMore: currentPage < totalPages,
+    page: currentPage,
   };
 }
 
@@ -238,31 +266,19 @@ export async function getProductsByIds(ids: string[]): Promise<
     categoryName: string;
   }[]
 > {
-  const activeCategories = new Map(
-    categories
-      .filter((category) => category.is_active)
-      .map((category) => [category.id, category]),
+  const [favoriteProducts, categories] = await Promise.all([
+    fetchProductsByIds(ids),
+    getActiveCategories(),
+  ]);
+
+  const categoryNames = new Map(
+    categories.map((category) => [category.id, category.name_ar]),
   );
 
-  const availableProducts = new Map(
-    products
-      .filter(
-        (product) =>
-          product.is_active && activeCategories.has(product.category_id),
-      )
-      .map((product) => [product.id, product]),
-  );
-
-  return [...new Set(ids)].flatMap((id) => {
-    const product = availableProducts.get(id);
-    if (!product) return [];
-
-    return [
-      {
-        product,
-        categoryName:
-          activeCategories.get(product.category_id)?.name_ar ?? "منتجات الخولي",
-      },
-    ];
-  });
+  return favoriteProducts
+    .filter((product) => categoryNames.has(product.category_id))
+    .map((product) => ({
+      product,
+      categoryName: categoryNames.get(product.category_id) ?? "منتجات الخولي",
+    }));
 }

@@ -1,5 +1,5 @@
 import { ProjectCard } from "@/components/home/projects/project-card";
-import { projects, projectsConfig } from "@/data/projects";
+import { projects } from "@/data/projects";
 
 export function ProjectsSection() {
   const featuredProjects = projects

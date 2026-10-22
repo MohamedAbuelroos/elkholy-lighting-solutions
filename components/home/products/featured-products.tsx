@@ -1,17 +1,16 @@
 import { ProductCard } from "@/components/home/products/product-card";
-import { categories } from "@/data/categories";
-import { products } from "@/data/products";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
-
+import { getFeaturedProducts } from "@/lib/queries/product-selections";
+import { getActiveCategories } from "@/lib/queries/categories";
 import { routes } from "@/config/routes";
 import { ProductSlider } from "@/components/home/products/product-slider";
 
-export function FeaturedProducts() {
-  const featuredProducts = products
-    .filter((product) => product.is_active && product.is_featured)
-    .sort((first, second) => first.sort_order - second.sort_order)
-    .slice(0, 8);
+export async function FeaturedProducts() {
+  const [featuredProducts, categories] = await Promise.all([
+    getFeaturedProducts(),
+    getActiveCategories(),
+  ]);
 
   if (featuredProducts.length === 0) return null;
 

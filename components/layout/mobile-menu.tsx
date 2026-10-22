@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { routes } from "@/config/routes";
 import { ProductsNavigation } from "@/components/layout/products-navigation";
+import type { Category } from "@/types/category";
 
 type NavigationItem = {
   readonly label: string;
@@ -14,9 +15,10 @@ type NavigationItem = {
 type MobileMenuProps = {
   items: readonly NavigationItem[];
   contactHref: string;
+  categories: Category[];
 };
 
-function MobileMenu({ items, contactHref }: MobileMenuProps) {
+function MobileMenu({ items, contactHref, categories }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -96,6 +98,7 @@ function MobileMenu({ items, contactHref }: MobileMenuProps) {
                 {item.href === routes.products ? (
                   <ProductsNavigation
                     key={isOpen ? "menu-open" : "menu-closed"}
+                    categories={categories}
                     mobile
                   />
                 ) : (

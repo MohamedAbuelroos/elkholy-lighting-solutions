@@ -73,7 +73,7 @@ export function ProductCard({ product, categoryName }: ProductCardProps) {
           </Link>
         </h3>
 
-        <p className="mt-1 line-clamp-2 h-10 text-xs leading-5 text-muted">
+        <p className="line-clamp-2 h-10 text-xs leading-5 text-muted">
           {product.description_ar}
         </p>
 
