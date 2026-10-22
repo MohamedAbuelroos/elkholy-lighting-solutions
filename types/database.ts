@@ -212,6 +212,110 @@ export type Database = {
           },
         ]
       }
+      project_image_cleanup_jobs: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          src: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          src: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          src?: string
+        }
+        Relationships: []
+      }
+      project_images: {
+        Row: {
+          alt: string
+          created_at: string
+          id: string
+          project_id: string
+          sort_order: number
+          src: string
+          updated_at: string
+        }
+        Insert: {
+          alt?: string
+          created_at?: string
+          id?: string
+          project_id: string
+          sort_order?: number
+          src: string
+          updated_at?: string
+        }
+        Update: {
+          alt?: string
+          created_at?: string
+          id?: string
+          project_id?: string
+          sort_order?: number
+          src?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          category_ar: string
+          category_en: string | null
+          created_at: string
+          description_ar: string
+          description_en: string | null
+          id: string
+          is_active: boolean
+          is_featured: boolean
+          sort_order: number
+          title_ar: string
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_ar: string
+          category_en?: string | null
+          created_at?: string
+          description_ar?: string
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          sort_order?: number
+          title_ar: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_ar?: string
+          category_en?: string | null
+          created_at?: string
+          description_ar?: string
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          sort_order?: number
+          title_ar?: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -221,6 +325,10 @@ export type Database = {
       current_user_is_owner: { Args: never; Returns: boolean }
       delete_catalog_product: {
         Args: { p_product_id: string }
+        Returns: string
+      }
+      delete_catalog_project: {
+        Args: { p_project_id: string }
         Returns: string
       }
       get_admin_users: {
@@ -246,6 +354,10 @@ export type Database = {
         Args: { p_action: string; p_image_id: string; p_product_id: string }
         Returns: string
       }
+      manage_project_image: {
+        Args: { p_action: string; p_image_id: string; p_project_id: string }
+        Returns: boolean
+      }
       normalize_catalog_search: { Args: { input: string }; Returns: string }
       set_catalog_admin_active: {
         Args: { p_is_active: boolean; p_user_id: string }
@@ -261,6 +373,10 @@ export type Database = {
       }
       set_product_publication: {
         Args: { p_is_active: boolean; p_product_id: string }
+        Returns: boolean
+      }
+      set_project_publication: {
+        Args: { p_is_active: boolean; p_project_id: string }
         Returns: boolean
       }
     }

@@ -115,6 +115,14 @@ export default async function AdminLayout({
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/admin/projects"
+                  className="flex min-h-11 items-center rounded-control px-4 py-3 text-sm text-muted transition-colors hover:bg-surface-elevated hover:text-primary"
+                >
+                  المشاريع
+                </Link>
+              </li>
+              <li>
                 {isOwner === true && (
                   <Link
                     href="/admin/users"

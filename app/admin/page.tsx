@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { FaArrowLeft, FaBoxOpen, FaLayerGroup } from "react-icons/fa6";
+import {
+  FaArrowLeft,
+  FaBoxOpen,
+  FaLayerGroup,
+  FaBriefcase,
+} from "react-icons/fa6";
 
 import { requireAdmin } from "@/lib/auth/require-admin";
 
@@ -15,6 +20,13 @@ const sections = [
     description: "أدر بيانات المنتجات وأسعارها وفئاتها وظهورها داخل الكتالوج.",
     href: "/admin/products",
     icon: FaBoxOpen,
+  },
+  {
+    title: "المشاريع",
+    description:
+      "أدر أعمال الخولي وبيانات المشاريع وصورها واختيارات الصفحة الرئيسية.",
+    href: "/admin/projects",
+    icon: FaBriefcase,
   },
 ] as const;
 
