@@ -10,7 +10,7 @@ import type {
   ProductImageUploadState,
 } from "@/lib/admin/product-image-types";
 import { PRODUCT_IMAGE_CONFIG } from "@/lib/products/image-config";
-import { prepareProductImage } from "@/lib/products/prepare-product-image";
+import { prepareCatalogImage } from "@/lib/images/prepare-catalog-image";
 import { ProductImagesGallery } from "@/components/admin/products/product-images-gallery";
 
 type ProductImagesManagerProps = {
@@ -80,7 +80,7 @@ export function ProductImagesManager({
     setIsPreparing(true);
 
     try {
-      const optimizedFile = await prepareProductImage(file);
+      const optimizedFile = await prepareCatalogImage(file);
 
       if (version !== selectionVersion.current) return;
 

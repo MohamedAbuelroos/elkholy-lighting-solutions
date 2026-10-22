@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
 import { requireAdmin } from "@/lib/auth/require-admin";
-import { optimizeProductImage } from "@/lib/admin/images/optimize-product-image";
+import { optimizeCatalogImage } from "@/lib/admin/images/optimize-catalog-image";
 import type { ProductImageUploadState } from "@/lib/admin/product-image-types";
 import { PRODUCT_IMAGE_CONFIG } from "@/lib/products/image-config";
 import type { ProductImageActionState } from "@/lib/admin/product-image-types";
@@ -83,7 +83,7 @@ export async function uploadProductImage(
   let optimizedImage: Buffer;
 
   try {
-    optimizedImage = await optimizeProductImage(file);
+    optimizedImage = await optimizeCatalogImage(file);
   } catch (error) {
     return fail(
       error instanceof Error ? error.message : "تعذّرت معالجة الصورة.",
