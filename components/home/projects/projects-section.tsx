@@ -1,13 +1,14 @@
-import { ProjectCard } from "@/components/home/projects/project-card";
-import { projects } from "@/data/projects";
+import Link from "next/link";
+import { FaArrowLeft } from "react-icons/fa6";
 
-export function ProjectsSection() {
-  const featuredProjects = projects
-    .filter((project) => project.is_active && project.is_featured)
-    .sort((first, second) => first.sort_order - second.sort_order)
-    .slice(0, 3);
+import { ProjectsGrid } from "@/components/projects/projects-grid";
+import { routes } from "@/config/routes";
+import { getFeaturedProjects } from "@/lib/queries/projects";
 
-  if (featuredProjects.length === 0) return null;
+export async function ProjectsSection() {
+  const projects = await getFeaturedProjects();
+
+  if (projects.length === 0) return null;
 
   return (
     <section
@@ -25,23 +26,30 @@ export function ProjectsSection() {
 
             <h2
               id="projects-title"
-              className="text-4xl font-bold leading-[1.4] text-foreground sm:text-5xl"
+              className="text-4xl font-bold leading-[1.4] sm:text-5xl"
             >
-              مشاريعنا，
+              مشاريعنا،
               <span className="mt-1 block text-primary">تفاصيل تتحدث عنا.</span>
             </h2>
           </div>
 
-          <p className="max-w-md text-sm leading-7 text-muted">
-            إضاءة وتشطيبات وحلول تتكامل مع التصميم، لتمنح كل مساحة طابعها الخاص.
-          </p>
+          <div className="max-w-md">
+            <p className="text-sm leading-7 text-muted">
+              إضاءة وتشطيبات وحلول تتكامل مع التصميم، لتمنح كل مساحة طابعها
+              الخاص.
+            </p>
+
+            <Link
+              href={routes.projects}
+              className="mt-4 inline-flex min-h-10 items-center gap-3 text-sm font-medium text-primary"
+            >
+              جميع المشاريع
+              <FaArrowLeft aria-hidden="true" className="size-3" />
+            </Link>
+          </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
+        <ProjectsGrid projects={projects} />
       </div>
     </section>
   );

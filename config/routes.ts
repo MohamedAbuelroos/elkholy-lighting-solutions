@@ -3,7 +3,7 @@ export const routes = {
   products: "/products",
   categories: "/products",
   services: "/#solutions",
-  projects: "/#projects",
+  projects: "/projects",
   about: "/about",
   branches: "/links#branches",
   contact: "/links",
@@ -26,8 +26,4 @@ export function getProductPath(slug: string): string {
 
 export function getCategoryPath(slug: string): string {
   return `${routes.products}?category=${encodeURIComponent(slug)}`;
-}
-
-export function getProjectPath(slug: string): string {
-  return `/projects/${encodeURIComponent(slug)}`;
 }
