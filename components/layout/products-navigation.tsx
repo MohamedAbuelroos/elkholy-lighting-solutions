@@ -3,19 +3,16 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { FaArrowLeft, FaChevronDown } from "react-icons/fa6";
-
-import { categories } from "@/data/categories";
+import type { Category } from "@/types/category";
 import { getCategoryPath, routes } from "@/config/routes";
 
 type ProductsNavigationProps = {
+  categories: Category[];
   mobile?: boolean;
 };
 
-const rootCategories = categories
-  .filter((category) => category.is_active && category.parent_id === null)
-  .sort((first, second) => first.sort_order - second.sort_order);
-
 export function ProductsNavigation({
+  categories,
   mobile = false,
 }: ProductsNavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -109,7 +106,7 @@ export function ProductsNavigation({
               </Link>
             </li>
 
-            {rootCategories.map((category) => (
+            {categories.map((category) => (
               <li key={category.id}>
                 <Link
                   href={getCategoryPath(category.slug)}

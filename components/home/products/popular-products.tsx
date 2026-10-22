@@ -1,12 +1,12 @@
 import { PopularProductCard } from "@/components/home/products/popular-product-card";
-import { categories } from "@/data/categories";
-import { products } from "@/data/products";
+import { getPopularProducts } from "@/lib/queries/product-selections";
+import { getActiveCategories } from "@/lib/queries/categories";
 
-export function PopularProducts() {
-  const popularProducts = products
-    .filter((product) => product.is_active && product.is_popular)
-    .sort((first, second) => first.sort_order - second.sort_order)
-    .slice(0, 8);
+export async function PopularProducts() {
+  const [popularProducts, categories] = await Promise.all([
+    getPopularProducts(),
+    getActiveCategories(),
+  ]);
 
   if (popularProducts.length === 0) return null;
 

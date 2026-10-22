@@ -10,7 +10,7 @@ import {
 
 import { getCategoryPath, mainNavigation, routes } from "@/config/routes";
 import { siteConfig } from "@/config/site";
-import { categories } from "@/data/categories";
+import { getRootCategories } from "@/lib/queries/categories";
 import { company } from "@/data/company";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 
@@ -19,14 +19,11 @@ const footerNavigation = [
   { label: "المفضلة", href: routes.favorites },
 ];
 
-const rootCategories = categories
-  .filter((category) => category.is_active && category.parent_id === null)
-  .sort((first, second) => first.sort_order - second.sort_order);
-
 const footerLinkClass =
   "inline-flex min-h-10 items-center text-sm leading-6 text-muted transition-colors hover:text-primary";
 
-export function Footer() {
+export async function Footer() {
+  const rootCategories = await getRootCategories();
   return (
     <footer className="relative border-t border-border bg-surface">
       <div

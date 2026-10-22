@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { CatalogHero } from "@/components/products/catalog/catalog-hero";
-import { CatalogCategories } from "@/components/products/catalog/catalog-categories";
-import { CatalogResults } from "@/components/products/catalog/catalog-results";
-import { getCatalog, type CatalogSort } from "@/lib/queries/products";
+import { CatalogContent } from "@/components/products/catalog/catalog-content";
+import { CatalogCategoryNavigation } from "@/components/products/catalog/catalog-category-navigation";
+import { CatalogSkeleton } from "@/components/products/catalog/catalog-skeleton";
 import { CatalogHelpBanner } from "@/components/products/catalog/catalog-help-banner";
+
+import { getActiveCategories } from "@/lib/queries/categories";
+import { getCatalog, type CatalogSort } from "@/lib/queries/products";
 
 export const metadata: Metadata = {
   title: "المنتجات | الخولي",
@@ -15,115 +19,134 @@ export const metadata: Metadata = {
 type ProductsPageProps = {
   searchParams: Promise<{
     category?: string | string[];
+    subcategory?: string | string[];
+    q?: string | string[];
     sort?: string | string[];
     page?: string | string[];
-    q?: string | string[];
-    subcategory?: string | string[];
   }>;
 };
+
+function readParam(value: string | string[] | undefined) {
+  return typeof value === "string" ? value.trim() || undefined : undefined;
+}
 
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
   const params = await searchParams;
 
-  const searchQuery =
-    typeof params.q === "string" ? params.q.trim().slice(0, 100) : "";
-
-  const categorySlug =
-    typeof params.category === "string"
-      ? params.category.trim() || undefined
-      : undefined;
-
-  const subcategorySlug =
-    typeof params.subcategory === "string"
-      ? params.subcategory.trim() || undefined
-      : undefined;
+  const categorySlug = readParam(params.category);
+  const subcategorySlug = readParam(params.subcategory);
+  const searchQuery = (readParam(params.q) ?? "").slice(0, 100);
 
   const sort: CatalogSort =
     params.sort === "price-asc" || params.sort === "price-desc"
       ? params.sort
       : "default";
 
-  const requestedPage =
-    typeof params.page === "string" && /^[1-9]\d*$/.test(params.page)
-      ? Number(params.page)
-      : 1;
+  const rawPage = readParam(params.page);
 
-  const catalog = await getCatalog({
+  const requestedPage =
+    rawPage && /^[1-9]\d*$/.test(rawPage) ? Number(rawPage) : 1;
+
+  // Start the request without waiting for the catalog results here.
+  const catalogPromise = getCatalog({
     categorySlug,
     subcategorySlug,
+    query: searchQuery,
     sort,
     page: requestedPage,
-    query: searchQuery,
   });
 
-  const nextParams = new URLSearchParams();
+  const categories = await getActiveCategories();
 
-  if (categorySlug) nextParams.set("category", categorySlug);
-  if (sort !== "default") nextParams.set("sort", sort);
+  const selectedCategory = categories.find(
+    (category) => category.slug === categorySlug,
+  );
 
-  if (searchQuery) nextParams.set("q", searchQuery);
+  const selectedSubcategory = selectedCategory
+    ? categories.find(
+        (category) =>
+          category.slug === subcategorySlug &&
+          category.parent_id === selectedCategory.id,
+      )
+    : undefined;
 
-  if (subcategorySlug) {
-    nextParams.set("subcategory", subcategorySlug);
-  }
-  nextParams.set("page", String(catalog.page + 1));
+  const invalidCategory = Boolean(categorySlug && !selectedCategory);
 
-  const loadMoreHref = `/products?${nextParams.toString()}`;
-
-  const title = catalog.invalidCategory
+  const title = invalidCategory
     ? "الفئة غير موجودة"
-    : (catalog.selectedCategory?.name_ar ?? "جميع المنتجات");
+    : (selectedCategory?.name_ar ?? "جميع المنتجات");
 
-  const description = catalog.invalidCategory
-    ? "الفئة المطلوبة غير متاحة. استكشف بقية فئات ومنتجات الخولي."
-    : (catalog.selectedCategory?.description_ar ??
+  const description = invalidCategory
+    ? "الفئة المطلوبة غير متاحة. استكشف بقية منتجات الخولي."
+    : (selectedCategory?.description_ar ??
       "اكتشف حلول الإضاءة والتشطيبات الكهربائية والأنظمة الذكية، واختر التفاصيل التي تكمل مساحتك.");
 
-  const transitionKey = categorySlug ?? "all";
+  const resultsKey = JSON.stringify([
+    categorySlug,
+    subcategorySlug,
+    searchQuery,
+    sort,
+  ]);
 
   return (
     <div className="min-h-screen bg-background pt-20 lg:pt-24">
       <CatalogHero
         title={title}
         description={description}
-        transitionKey={transitionKey}
+        transitionKey={categorySlug ?? "all"}
         selectedCategoryName={
-          catalog.selectedCategory?.name_ar ??
-          (catalog.invalidCategory ? "فئة غير موجودة" : undefined)
+          selectedCategory?.name_ar ??
+          (invalidCategory ? "فئة غير موجودة" : undefined)
         }
-        imageSrc={catalog.selectedCategory?.image_path ?? undefined}
+        imageSrc={selectedCategory?.image_path ?? undefined}
       />
 
-      <CatalogCategories
-        categories={catalog.categories.filter(
-          (category) => category.parent_id === null,
-        )}
-        selectedSlug={categorySlug}
-        categoryCounts={catalog.categoryCounts}
-        totalProducts={catalog.totalProducts}
-      />
+      <Suspense
+        fallback={
+          <div role="status" className="border-b border-border py-5">
+            <span className="sr-only">جارٍ تحميل الفئات…</span>
 
-      <CatalogResults
-        products={catalog.products}
-        categories={catalog.categories}
-        invalidCategory={catalog.invalidCategory || catalog.invalidSubcategory}
-        sort={sort}
-        totalResults={catalog.totalResults}
-        hasMore={catalog.hasMore}
-        loadMoreHref={loadMoreHref}
-        searchQuery={searchQuery}
-        transitionKey={`${transitionKey}-${subcategorySlug ?? "all-types"}-${sort}-${searchQuery}`}
-        subcategories={catalog.subcategories}
-        selectedSubcategorySlug={subcategorySlug ?? ""}
-      />
+            <div
+              aria-hidden="true"
+              className="site-container flex gap-3 overflow-hidden motion-safe:animate-pulse"
+            >
+              {Array.from({ length: 6 }, (_, index) => (
+                <div
+                  key={index}
+                  className="h-28 min-w-44 flex-1 rounded-xl bg-surface-elevated"
+                />
+              ))}
+            </div>
+          </div>
+        }
+      >
+        <CatalogCategoryNavigation
+          catalogPromise={catalogPromise}
+          selectedSlug={categorySlug}
+        />
+      </Suspense>
+
+      <Suspense
+        key={resultsKey}
+        fallback={
+          <div className="site-container py-8 sm:py-10">
+            <CatalogSkeleton />
+          </div>
+        }
+      >
+        <CatalogContent
+          catalogPromise={catalogPromise}
+          categorySlug={categorySlug}
+          subcategorySlug={subcategorySlug}
+          searchQuery={searchQuery}
+          sort={sort}
+        />
+      </Suspense>
 
       <CatalogHelpBanner
-        categoryName={
-          catalog.selectedSubcategory?.name_ar ??
-          catalog.selectedCategory?.name_ar
-        }
+        categoryName={selectedSubcategory?.name_ar ?? selectedCategory?.name_ar}
       />
     </div>
   );

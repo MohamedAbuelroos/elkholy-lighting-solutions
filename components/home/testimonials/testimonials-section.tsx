@@ -1,6 +1,6 @@
 import { TestimonialCard } from "@/components/home/testimonials/testimonial-card";
 import { TestimonialsSlider } from "@/components/home/testimonials/testimonials-slider";
-import { testimonials, testimonialsConfig } from "@/data/testimonials";
+import { testimonials } from "@/data/testimonials";
 
 export function TestimonialsSection() {
   const visibleTestimonials = testimonials
