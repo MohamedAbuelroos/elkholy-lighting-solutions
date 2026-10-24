@@ -40,7 +40,7 @@ export async function RelatedProducts({
 
           <h2
             id="related-products-title"
-            className="text-2xl font-semibold leading-relaxed tracking-tight sm:text-3xl"
+            className="text-[clamp(1.5rem,2.5vw,2rem)] font-medium leading-[1.65] text-foreground"
           >
             قد يعجبك أيضًا
           </h2>
@@ -52,7 +52,7 @@ export async function RelatedProducts({
 
         <Link
           href={categoryHref}
-          className="group inline-flex min-h-11 shrink-0 items-center gap-3 self-start rounded-full border border-border bg-surface px-5 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary sm:self-auto"
+          className="group inline-flex min-h-11 shrink-0 items-center gap-3 self-start rounded-full border border-border bg-surface px-5 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary sm:self-auto focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
         >
           عرض المجموعة كاملة
           <FaArrowLeft

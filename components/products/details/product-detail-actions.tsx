@@ -94,14 +94,23 @@ export function ProductDetailActions({
 
   return (
     <div>
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <label htmlFor="product-order-quantity" className="text-sm font-medium">
-          الكمية المطلوبة
-        </label>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <label
+            htmlFor="product-order-quantity"
+            className="text-xs font-medium text-foreground"
+          >
+            الكمية المطلوبة
+          </label>
+
+          <p className="mt-1 text-[10px] leading-6 text-muted">
+            حدّد العدد قبل إرسال الطلب
+          </p>
+        </div>
 
         <div
           dir="ltr"
-          className="inline-flex items-center rounded-full border border-border bg-surface p-1"
+          className="inline-flex items-center rounded-full border border-border bg-background p-1"
         >
           <button
             type="button"
@@ -138,7 +147,7 @@ export function ProductDetailActions({
             aria-describedby={
               !isValidQuantity ? "product-quantity-error" : undefined
             }
-            className="h-11 w-14 rounded-lg bg-transparent text-center text-sm font-semibold tabular-nums text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="h-11 w-12 rounded-lg bg-transparent text-center text-sm font-medium tabular-nums text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           />
 
           <button
@@ -157,23 +166,23 @@ export function ProductDetailActions({
         <p
           id="product-quantity-error"
           role="status"
-          className="mb-4 text-xs text-muted"
+          className="mt-3 text-xs leading-6 text-muted"
         >
           اكتب كمية من 1 إلى 999.
         </p>
       )}
 
       {price !== null && isValidQuantity && quantity > 1 && (
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-          <span className="text-xs text-muted">الإجمالي المبدئي للمنتجات</span>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+          <span className="text-[11px] text-muted">الإجمالي المبدئي</span>
 
-          <span className="text-base font-semibold tabular-nums">
+          <span className="text-base font-medium tabular-nums text-foreground">
             {priceFormatter.format(price * quantity)}
           </span>
         </div>
       )}
 
-      <div className="flex items-stretch gap-3">
+      <div className="mt-5 flex items-stretch gap-2.5">
         <a
           href={isValidQuantity ? orderUrl.toString() : undefined}
           target="_blank"
@@ -183,7 +192,7 @@ export function ProductDetailActions({
           onClick={(event) => {
             if (!isValidQuantity) event.preventDefault();
           }}
-          className={`inline-flex min-h-14 flex-1 items-center justify-center gap-3 rounded-full bg-primary px-4 text-sm font-semibold text-on-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${
+          className={`inline-flex min-h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-3 py-3 text-xs font-medium leading-6 text-on-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${
             isValidQuantity
               ? "hover:bg-primary-hover"
               : "cursor-not-allowed opacity-50"
@@ -191,6 +200,7 @@ export function ProductDetailActions({
         >
           <FaWhatsapp aria-hidden="true" className="size-5 shrink-0" />
           اطلب المنتج عبر واتساب
+          <span className="sr-only">يفتح في تبويب جديد</span>
         </a>
 
         <button
@@ -205,14 +215,14 @@ export function ProductDetailActions({
           onClick={() => toggleFavorite(productId)}
           className={`flex size-14 shrink-0 items-center justify-center rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${
             isFavorite
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border bg-surface text-foreground hover:border-primary/60 hover:text-primary"
+              ? "border-primary/50 bg-primary/10 text-primary"
+              : "border-border bg-background text-muted hover:border-primary/50 hover:text-primary"
           }`}
         >
           {isFavorite ? (
-            <FaHeart aria-hidden="true" className="size-5" />
+            <FaHeart aria-hidden="true" className="size-4" />
           ) : (
-            <FaRegHeart aria-hidden="true" className="size-5" />
+            <FaRegHeart aria-hidden="true" className="size-4" />
           )}
         </button>
       </div>

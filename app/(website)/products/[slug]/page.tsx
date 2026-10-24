@@ -8,9 +8,10 @@ import { ProductGallery } from "@/components/products/details/product-gallery";
 import { ProductInformation } from "@/components/products/details/product-information";
 import { RelatedProducts } from "@/components/products/details/related-products";
 
-import { getProductPath, routes } from "@/config/routes";
+import { getCategoryPath, getProductPath, routes } from "@/config/routes";
 import { getProductDetails } from "@/lib/queries/product-details";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
+import styles from "@/components/products/details/product-detail-enter.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -79,18 +80,37 @@ function RelatedProductsSkeleton() {
   return (
     <div
       role="status"
-      aria-label="جارٍ تحميل المنتجات المشابهة"
-      className="mt-16 border-t border-border pt-12"
+      className="mt-16 border-t border-border pt-10 sm:mt-20 sm:pt-14"
     >
-      <div className="h-8 w-48 rounded bg-surface-elevated motion-safe:animate-pulse" />
+      <span className="sr-only">جارٍ تحميل المنتجات المشابهة</span>
 
-      <div className="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {Array.from({ length: 4 }, (_, index) => (
-          <div
-            key={index}
-            className="aspect-[3/4] rounded-2xl bg-surface-elevated motion-safe:animate-pulse"
-          />
-        ))}
+      <div aria-hidden="true">
+        <div className="h-3 w-24 rounded bg-surface-elevated motion-safe:animate-pulse" />
+
+        <div className="mt-4 h-8 w-48 rounded bg-surface-elevated motion-safe:animate-pulse" />
+
+        <div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          {Array.from({ length: 4 }, (_, index) => (
+            <div
+              key={index}
+              className="overflow-hidden rounded-2xl border border-border bg-surface"
+            >
+              <div className="aspect-[4/3] bg-surface-elevated motion-safe:animate-pulse" />
+
+              <div className="space-y-3 p-4">
+                <div className="h-3 w-1/3 rounded bg-surface-elevated motion-safe:animate-pulse" />
+
+                <div className="h-4 w-4/5 rounded bg-surface-elevated motion-safe:animate-pulse" />
+
+                <div className="h-4 w-3/5 rounded bg-surface-elevated motion-safe:animate-pulse" />
+
+                <div className="border-t border-border pt-3">
+                  <div className="h-5 w-1/2 rounded bg-surface-elevated motion-safe:animate-pulse" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -105,27 +125,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const { product, category, categoryTrail } = details;
 
   return (
-    <div className="relative bg-background pb-16 pt-28 text-foreground sm:pb-24 lg:pt-32">
+    <div className="bg-background pb-12 pt-24 text-foreground sm:pb-16 sm:pt-28 lg:pb-20 lg:pt-32">
       <div className="site-container">
-        <nav aria-label="مسار التنقل" className="mb-7 sm:mb-10">
-          <ol className="flex flex-wrap items-center gap-x-2 gap-y-2 text-[11px] leading-6 text-muted sm:gap-x-3 sm:text-xs">
+        <nav
+          aria-label="مسار التنقل"
+          className="mb-7 border-b border-border pb-5 sm:mb-9"
+        >
+          <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] leading-6 text-muted sm:gap-x-3 sm:text-[11px]">
             <li>
               <Link
                 href={routes.home}
-                className="transition-colors hover:text-primary"
+                className="rounded-sm transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 الرئيسية
               </Link>
             </li>
 
             <li aria-hidden="true">
-              <FaChevronLeft className="size-2" />
+              <FaChevronLeft className="size-2 text-muted/60" />
             </li>
 
             <li>
               <Link
                 href={routes.products}
-                className="transition-colors hover:text-primary"
+                className="rounded-sm transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 المنتجات
               </Link>
@@ -134,27 +157,32 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {categoryTrail.map((item) => (
               <li
                 key={item.id}
-                className="inline-flex items-center gap-2 sm:gap-3"
+                className="inline-flex min-w-0 items-center gap-2 sm:gap-3"
               >
-                <FaChevronLeft aria-hidden="true" className="size-2 shrink-0" />
+                <FaChevronLeft
+                  aria-hidden="true"
+                  className="size-2 shrink-0 text-muted/60"
+                />
 
                 <Link
-                  href={`${routes.products}?${new URLSearchParams({
-                    category: item.slug,
-                  })}`}
-                  className="transition-colors hover:text-primary"
+                  href={getCategoryPath(item.slug)}
+                  className="rounded-sm transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
                   {item.name_ar}
                 </Link>
               </li>
             ))}
 
-            <li className="inline-flex min-w-0 items-center gap-2 sm:gap-3">
-              <FaChevronLeft aria-hidden="true" className="size-2 shrink-0" />
+            <li className="inline-flex min-w-0 max-w-full items-center gap-2 sm:gap-3">
+              <FaChevronLeft
+                aria-hidden="true"
+                className="size-2 shrink-0 text-muted/60"
+              />
 
               <span
                 aria-current="page"
-                className="line-clamp-1 text-foreground"
+                title={product.name_ar}
+                className="truncate text-foreground"
               >
                 {product.name_ar}
               </span>
@@ -162,22 +190,36 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </ol>
         </nav>
 
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-12 xl:gap-20">
-          <ProductGallery
-            key={product.id}
-            images={product.images}
-            productName={product.name_ar}
-          />
+        {/* Product gallery and information */}
+        <div
+          key={`product-details-${product.id}`}
+          className="grid items-start gap-7 sm:gap-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10 xl:gap-16"
+        >
+          <div className="min-w-0 lg:sticky lg:top-28">
+            <div className={styles.gallery}>
+              <ProductGallery
+                key={product.id}
+                images={product.images}
+                productName={product.name_ar}
+              />
+            </div>
+          </div>
 
-          <ProductInformation
-            product={product}
-            category={category}
-            productUrl={getProductUrl(product.slug)}
-            whatsappHref={getPrimaryWhatsAppHref()}
-          />
+          <div className={`min-w-0 ${styles.information}`}>
+            <ProductInformation
+              product={product}
+              category={category}
+              productUrl={getProductUrl(product.slug)}
+              whatsappHref={getPrimaryWhatsAppHref()}
+            />
+          </div>
         </div>
 
-        <Suspense fallback={<RelatedProductsSkeleton />}>
+        {/* Related products stream independently */}
+        <Suspense
+          key={`related-products-${product.id}`}
+          fallback={<RelatedProductsSkeleton />}
+        >
           <RelatedProducts
             productId={product.id}
             categoryId={category.id}
