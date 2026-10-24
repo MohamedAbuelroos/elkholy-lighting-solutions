@@ -24,33 +24,42 @@
   --page-gutter: clamp(1rem, 3vw, 2rem);
   --section-space: clamp(2.5rem, 4vw, 4rem);
 
-  --navbar-background: rgb(5 7 11 / 82%);
-  --navbar-shadow: 0 8px 32px rgb(0 0 0 / 12%);
+  --navbar-background: rgb(8 11 17 / 88%);
+  --navbar-border: rgb(214 167 68 / 12%);
+  --navbar-shadow:
+    0 8px 28px rgb(0 0 0 / 16%), inset 0 1px 0 rgb(255 255 255 / 025%);
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --background: #e4e0d8;
-  --foreground: #292723;
+  --background: #e8e4dc;
+  --foreground: #292620;
 
-  --surface: #ece8e1;
-  --surface-elevated: #d9d4cb;
+  --surface: #f0ece5;
+  --surface-elevated: #dfd9cf;
 
-  --primary: #8c651e;
-  --primary-hover: #755218;
-  --primary-dark: #624414;
+  --primary: #866020;
+  --primary-hover: #704e18;
+  --primary-dark: #5d4015;
   --on-primary: #ffffff;
 
-  --muted: #625d55;
-  --border: #c9c2b7;
+  --muted: #665e53;
+  --border: #cec5b8;
 
-  --navbar-background: rgb(228 224 216 / 90%);
-  --navbar-shadow: 0 8px 32px rgb(45 34 15 / 6%);
+  --navbar-background: rgb(232 228 220 / 92%);
+  --navbar-border: rgb(134 96 32 / 14%);
+  --navbar-shadow:
+    0 8px 24px rgb(45 34 15 / 7%), inset 0 1px 0 rgb(255 255 255 / 35%);
 }
 
+@supports not (backdrop-filter: blur(1px)) {
+  .site-navbar[data-scrolled="true"] {
+    background-color: var(--background);
+  }
+}
 @theme inline {
-  --font-sans: var(--font-cairo);
+  --font-sans: var(--font-alexandria), sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -82,7 +91,7 @@
     margin: 0;
     background: var(--background);
     color: var(--foreground);
-    font-family: var(--font-cairo), sans-serif;
+    font-family: var(--font-alexandria), sans-serif;
     line-height: 1.75;
   }
 
@@ -134,23 +143,29 @@
 
 /* Navbar over the hero */
 .site-navbar {
-  background: transparent;
-  border-bottom: 1px solid transparent;
   color: #ffffff;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
 
   transition:
-    background-color 200ms ease,
-    border-color 200ms ease,
-    box-shadow 200ms ease;
+    background-color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
 }
 
 .site-navbar[data-scrolled="true"] {
-  background: var(--navbar-background);
-  border-bottom-color: var(--border);
   color: var(--foreground);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+
+  background-color: var(--navbar-background);
+  border-bottom-color: var(--navbar-border);
   box-shadow: var(--navbar-shadow);
+
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
 }
 
 .navbar-brand {
@@ -220,7 +235,6 @@
 
 /* Smooth theme changes */
 body,
-.site-navbar,
 .site-navbar a,
 .site-navbar button,
 #mobile-navigation,
@@ -278,54 +292,6 @@ body,
   }
 }
 
-/* Separate layers let the gradient fade smoothly between themes. */
-.hero-bottom-fade::before,
-.hero-bottom-fade::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transition: opacity 250ms ease;
-}
-
-.hero-bottom-fade::before {
-  background: linear-gradient(
-    to top,
-    #05070b 0%,
-    rgb(5 7 11 / 85%) 20%,
-    rgb(5 7 11 / 45%) 50%,
-    rgb(5 7 11 / 12%) 75%,
-    transparent 100%
-  );
-  opacity: 1;
-}
-
-.hero-bottom-fade::after {
-  background: linear-gradient(
-    to top,
-    #e4e0d8 0%,
-    rgb(228 224 216 / 85%) 15%,
-    rgb(228 224 216 / 45%) 40%,
-    rgb(228 224 216 / 12%) 70%,
-    transparent 100%
-  );
-  opacity: 0;
-}
-
-:root[data-theme="light"] .hero-bottom-fade::before {
-  opacity: 0;
-}
-
-:root[data-theme="light"] .hero-bottom-fade::after {
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-bottom-fade::before,
-  .hero-bottom-fade::after {
-    transition: none;
-  }
-}
-
 .product-slider {
   scrollbar-width: none;
   scroll-behavior: auto;
@@ -333,21 +299,6 @@ body,
 
 .product-slider::-webkit-scrollbar {
   display: none;
-}
-
-.light-trails {
-  color: #d6a744;
-  opacity: 0.55;
-  transition: opacity 250ms ease;
-}
-
-.light-trails-glow {
-  opacity: 0.2;
-  filter: blur(9px);
-}
-
-.light-trails-lines {
-  opacity: 0.3;
 }
 
 :root[data-theme="light"] .light-trails {
@@ -470,5 +421,11 @@ body,
   .contact-sheet[open],
   .contact-sheet::backdrop {
     animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-navbar {
+    transition: none;
   }
 }

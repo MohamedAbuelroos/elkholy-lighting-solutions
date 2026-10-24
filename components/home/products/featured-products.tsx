@@ -1,10 +1,11 @@
-import { ProductCard } from "@/components/home/products/product-card";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
-import { getFeaturedProducts } from "@/lib/queries/product-selections";
-import { getActiveCategories } from "@/lib/queries/categories";
-import { routes } from "@/config/routes";
+
+import { ProductCard } from "@/components/home/products/product-card";
 import { ProductSlider } from "@/components/home/products/product-slider";
+import { routes } from "@/config/routes";
+import { getActiveCategories } from "@/lib/queries/categories";
+import { getFeaturedProducts } from "@/lib/queries/product-selections";
 
 export async function FeaturedProducts() {
   const [featuredProducts, categories] = await Promise.all([
@@ -14,6 +15,10 @@ export async function FeaturedProducts() {
 
   if (featuredProducts.length === 0) return null;
 
+  const categoryNames = new Map(
+    categories.map((category) => [category.id, category.name_ar]),
+  );
+
   return (
     <section
       id="featured-products"
@@ -21,59 +26,58 @@ export async function FeaturedProducts() {
       className="section-space border-t border-border bg-background"
     >
       <div className="site-container">
-        <div className="mb-8 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mb-8 grid gap-6 lg:mb-10 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16">
           <div>
-            <p className="mb-3 flex items-center gap-3 text-xs font-medium text-primary sm:text-sm">
-              <span aria-hidden="true" className="h-px w-8 bg-primary" />
+            <p className="mb-4 flex items-center gap-3 text-xs font-medium text-primary">
+              <span
+                aria-hidden="true"
+                className="h-px w-8 shrink-0 bg-primary/70"
+              />
               اختيارات الخولي
             </p>
 
             <h2
               id="featured-products-title"
-              className="text-4xl font-bold leading-[1.4] text-foreground sm:text-5xl"
+              className="text-[clamp(1.875rem,3vw,2.75rem)] font-bold leading-[1.55] text-foreground"
             >
-              تفاصيل تختارها，
-              <span className="mt-1 block text-primary">ومساحة تحبها.</span>
+              تفاصيل تختارها،
+              <span className="block text-primary">ومساحة تحبها.</span>
             </h2>
           </div>
 
-          <div className="max-w-md">
-            <p className="text-sm leading-7 text-muted">
-              تعرّف على مجموعة من منتجاتنا، واستفسر عن المواصفات والسعر وما
-              يناسب احتياجات مشروعك.
+          <div className="max-w-md lg:justify-self-end">
+            <p className="text-sm leading-8 text-muted">
+              اختيارات تجمع بين جمال التصميم وجودة التفاصيل. اكتشف ما يناسب
+              مساحتك، وتعرّف على مواصفات كل منتج.
             </p>
 
             <Link
               href={routes.products}
-              className="group mt-4 inline-flex min-h-11 items-center gap-3 rounded-full border border-primary/50 px-5 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-[#05070B]"
+              className="group mt-5 inline-flex min-h-11 items-center gap-4 rounded-full border border-border bg-surface px-5 text-xs font-medium text-foreground transition-colors duration-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
             >
               استكشف جميع المنتجات
               <FaArrowLeft
                 aria-hidden="true"
-                className="size-3.5 transition-transform duration-300 group-hover:-translate-x-1"
+                className="size-3 transition-transform duration-300 motion-safe:group-hover:-translate-x-1 motion-reduce:transition-none"
               />
             </Link>
           </div>
         </div>
 
         <ProductSlider>
-          {featuredProducts.map((product) => {
-            const category = categories.find(
-              (item) => item.id === product.category_id,
-            );
-
-            return (
-              <div
-                key={product.id}
-                className="w-[78%] shrink-0 snap-start sm:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-3rem)/4)]"
-              >
-                <ProductCard
-                  product={product}
-                  categoryName={category?.name_ar ?? "منتجات الخولي"}
-                />
-              </div>
-            );
-          })}
+          {featuredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="w-[78%] shrink-0 snap-start sm:w-[calc((100%_-_2rem)/3)] lg:w-[calc((100%_-_3rem)/4)]"
+            >
+              <ProductCard
+                product={product}
+                categoryName={
+                  categoryNames.get(product.category_id) ?? "منتجات الخولي"
+                }
+              />
+            </div>
+          ))}
         </ProductSlider>
       </div>
     </section>

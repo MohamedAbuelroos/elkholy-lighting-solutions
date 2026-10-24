@@ -2,18 +2,27 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
-import { mainNavigation, routes } from "@/config/routes";
-import { ProductsNavigation } from "@/components/layout/products-navigation";
-import { siteConfig } from "@/config/site";
-import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
+import { DesktopNavigation } from "@/components/layout/desktop-navigation";
+import { FavoritesLink } from "@/components/layout/favorites-link";
 import MobileMenu from "@/components/layout/mobile-menu";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
-import { usePathname } from "next/navigation";
-import { FavoritesLink } from "@/components/layout/favorites-link";
+import { NavigationHint } from "@/components/ui/navigation-hint";
+
+import { mainNavigation, routes } from "@/config/routes";
+import { siteConfig } from "@/config/site";
+import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
+
 import type { Category } from "@/types/category";
+
+import styles from "./navbar-polish.module.css";
+
+type NavbarClientProps = {
+  categories: Category[];
+};
 
 function subscribeToScroll(onChange: () => void) {
   window.addEventListener("scroll", onChange, { passive: true });
@@ -31,83 +40,66 @@ function getServerScrollSnapshot() {
   return false;
 }
 
-type NavbarClientProps = {
-  categories: Category[];
-};
-
 export function NavbarClient({ categories }: NavbarClientProps) {
+  const pathname = usePathname();
+
   const isScrolled = useSyncExternalStore(
     subscribeToScroll,
     getScrollSnapshot,
     getServerScrollSnapshot,
   );
-  const pathname = usePathname();
-  const showBackground = pathname !== routes.home || isScrolled;
 
+  const showBackground = pathname !== routes.home || isScrolled;
   const contactHref = getPrimaryWhatsAppHref();
 
   return (
     <header
       data-scrolled={showBackground}
-      className="site-navbar fixed inset-x-0 top-0 z-40"
+      className={`site-navbar ${styles.root} fixed inset-x-0 top-0 z-40`}
     >
-      <div className="site-container relative flex h-20 items-center justify-between gap-3 lg:h-22">
+      <div className="site-container relative flex h-20 items-center justify-between gap-4 lg:h-22">
         <Link
           href={routes.home}
           aria-label={`${siteConfig.nameAr} — الرئيسية`}
-          className="flex min-w-0 items-center gap-2 sm:gap-3"
+          className="relative flex min-w-0 shrink-0 items-center gap-2.5 sm:gap-3"
         >
           <Image
             src={siteConfig.logo.src}
-            alt="Elkholy Logo"
+            alt=""
             width={74}
             height={74}
-            className="size-11 shrink-0 rounded-control object-contain sm:size-18"
+            className="size-12 shrink-0 rounded-control object-contain sm:size-16"
           />
 
           <div dir="ltr" className="hidden min-w-0 text-start sm:block">
-            <span className="navbar-brand block text-sm font-semibold tracking-[0.18em] sm:text-lg">
+            <span className="navbar-brand block text-sm font-semibold tracking-[0.2em]">
               ELKHOLY
             </span>
 
-            <span className="navbar-subtitle mt-1 block text-[8px] tracking-[0.1em] sm:text-[10px]">
+            <span className="navbar-subtitle mt-1.5 block text-[8px] tracking-[0.12em]">
               LIGHTING SOLUTIONS
             </span>
           </div>
+
+          <NavigationHint />
         </Link>
 
-        <nav
-          aria-label="التنقل الرئيسي"
-          className="hidden items-center gap-5 xl:flex"
-        >
-          {mainNavigation.map((item) =>
-            item.href === routes.products ? (
-              <ProductsNavigation key={item.href} categories={categories} />
-            ) : (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={pathname === item.href ? "page" : undefined}
-                className="navbar-link whitespace-nowrap py-3 text-sm font-medium transition-colors"
-              >
-                {item.label}
-              </Link>
-            ),
-          )}
-        </nav>
+        <DesktopNavigation categories={categories} />
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
           <a
             href={contactHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="navbar-control hidden min-h-11 items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors xl:inline-flex"
+            className={`${styles.contactButton} hidden xl:inline-flex`}
           >
-            <FaWhatsapp aria-hidden="true" className="size-5" />
+            <FaWhatsapp aria-hidden="true" className="size-4 shrink-0" />
             تواصل معنا
           </a>
+
           <FavoritesLink />
           <ThemeToggle />
+
           <MobileMenu
             items={mainNavigation}
             contactHref={contactHref}

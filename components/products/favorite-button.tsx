@@ -16,6 +16,7 @@ export function FavoriteButton({
   className = "",
 }: FavoriteButtonProps) {
   const { favoriteIds, toggleFavorite } = useFavorites();
+
   const isFavorite = favoriteIds.includes(productId);
 
   return (
@@ -29,17 +30,22 @@ export function FavoriteButton({
       }
       title={isFavorite ? "إزالة من المفضلة" : "إضافة للمفضلة"}
       onClick={() => toggleFavorite(productId)}
-      className={`flex size-10 items-center justify-center rounded-full border shadow-sm backdrop-blur-md transition-colors duration-200 motion-reduce:transition-none ${
+      className={`group/favorite flex size-10 shrink-0 items-center justify-center rounded-full border shadow-sm backdrop-blur-md transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2B858] motion-reduce:transition-none ${
         isFavorite
-          ? "border-[#E2B858]/60 bg-[#25190D]/90 text-[#F0C573]"
-          : "border-white/25 bg-black/45 text-white hover:border-[#E2B858]/60 hover:text-[#F0C573]"
+          ? "border-[#E2B858]/60 bg-[#25190D]/90 text-[#F0C573] hover:bg-[#352411]"
+          : "border-white/30 bg-black/50 text-white hover:border-[#E2B858]/60 hover:bg-black/65 hover:text-[#F0C573]"
       } ${className}`}
     >
-      {isFavorite ? (
-        <FaHeart aria-hidden="true" className="size-4" />
-      ) : (
-        <FaRegHeart aria-hidden="true" className="size-4" />
-      )}
+      <span
+        aria-hidden="true"
+        className="transition-transform duration-200 motion-safe:group-hover/favorite:scale-110 motion-safe:group-active/favorite:scale-95 motion-reduce:transition-none"
+      >
+        {isFavorite ? (
+          <FaHeart className="size-4" />
+        ) : (
+          <FaRegHeart className="size-4" />
+        )}
+      </span>
     </button>
   );
 }

@@ -5,8 +5,8 @@ export const routes = {
   services: "/#solutions",
   projects: "/projects",
   about: "/about",
-  branches: "/links#branches",
-  contact: "/links",
+  contact: "/contact",
+  branches: "/contact#branches",
   links: "/links",
   favorites: "/favorites",
 } as const;
@@ -14,10 +14,9 @@ export const routes = {
 export const mainNavigation = [
   { label: "الرئيسية", href: routes.home },
   { label: "المنتجات", href: routes.products },
-  { label: "حلولنا", href: routes.services },
   { label: "مشاريعنا", href: routes.projects },
   { label: "من نحن", href: routes.about },
-  { label: "التواصل والفروع", href: routes.links },
+  { label: "تواصل معنا", href: routes.contact },
 ] as const;
 
 export function getProductPath(slug: string): string {

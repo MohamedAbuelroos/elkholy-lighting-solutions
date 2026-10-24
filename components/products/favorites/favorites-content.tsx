@@ -2,12 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
-import { FaArrowLeft } from "react-icons/fa6";
+import {
+  FaArrowLeft,
+  FaArrowRotateRight,
+  FaCircleExclamation,
+} from "react-icons/fa6";
+
 import { loadFavoriteProducts } from "@/app/(website)/favorites/actions";
 import { ProductCard } from "@/components/home/products/product-card";
-import { useFavorites } from "@/hooks/use-favorites";
 import { FavoritesEmpty } from "@/components/products/favorites/favorites-empty";
 import { FavoritesSkeleton } from "@/components/products/favorites/favorites-skeleton";
+import { routes } from "@/config/routes";
+import { useFavorites } from "@/hooks/use-favorites";
 
 type FavoriteItems = Awaited<ReturnType<typeof loadFavoriteProducts>>;
 
@@ -16,6 +22,8 @@ type LoadedResult = {
   items: FavoriteItems;
   failed: boolean;
 };
+
+const countFormatter = new Intl.NumberFormat("ar-EG");
 
 export function FavoritesContent() {
   const { favoriteIds } = useFavorites();
@@ -27,7 +35,7 @@ export function FavoritesContent() {
   });
 
   const [retry, setRetry] = useState(0);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const idsKey = JSON.stringify(favoriteIds);
 
@@ -65,25 +73,41 @@ export function FavoritesContent() {
 
   const ready = result.key === idsKey;
 
-  if (!ready) {
+  if (!ready || isPending) {
     return <FavoritesSkeleton />;
   }
 
   if (result.failed) {
     return (
-      <div className="rounded-2xl border border-border bg-surface px-6 py-16 text-center">
-        <p role="alert" className="text-sm text-foreground">
-          تعذّر تحميل المنتجات. جرّب مرة أخرى.
+      <section
+        aria-labelledby="favorites-error-title"
+        className="rounded-3xl border border-border bg-surface px-6 py-12 text-center sm:py-16"
+      >
+        <FaCircleExclamation
+          aria-hidden="true"
+          className="mx-auto mb-5 size-7 text-primary"
+        />
+
+        <h2
+          id="favorites-error-title"
+          className="text-lg font-medium text-foreground"
+        >
+          تعذّر تحميل اختياراتك
+        </h2>
+
+        <p role="alert" className="mt-3 text-sm leading-7 text-muted">
+          حصلت مشكلة أثناء التحميل. جرّب مرة أخرى.
         </p>
 
         <button
           type="button"
           onClick={() => setRetry((previous) => previous + 1)}
-          className="mt-5 min-h-11 rounded-control border border-primary/40 px-5 py-2 text-sm font-semibold text-primary hover:bg-primary/10"
+          className="mt-6 inline-flex min-h-11 items-center gap-3 rounded-full border border-primary/40 px-5 text-xs font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
         >
+          <FaArrowRotateRight aria-hidden="true" className="size-3" />
           إعادة المحاولة
         </button>
-      </div>
+      </section>
     );
   }
 
@@ -91,13 +115,18 @@ export function FavoritesContent() {
     return <FavoritesEmpty hasUnavailableProducts={favoriteIds.length > 0} />;
   }
 
+  const unavailableCount = Math.max(
+    0,
+    favoriteIds.length - result.items.length,
+  );
+
   return (
     <section aria-labelledby="favorites-results-title">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
+      <div className="mb-7 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
         <div className="flex items-center gap-3">
           <h2
             id="favorites-results-title"
-            className="text-sm font-semibold text-foreground"
+            className="text-base font-medium text-foreground"
           >
             اختياراتك المحفوظة
           </h2>
@@ -105,24 +134,35 @@ export function FavoritesContent() {
           <span
             role="status"
             aria-label={`${result.items.length} منتج متاح في المفضلة`}
-            className="inline-flex min-w-8 items-center justify-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-semibold tabular-nums text-primary"
+            className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-full border border-primary/20 bg-primary/5 px-2 text-[11px] font-medium tabular-nums text-primary"
           >
-            {result.items.length}
+            {countFormatter.format(result.items.length)}
           </span>
         </div>
 
         <Link
-          href="/products"
-          className="inline-flex min-h-10 items-center gap-2 text-xs font-semibold text-primary transition-colors hover:text-primary-hover"
+          href={routes.products}
+          className="group inline-flex min-h-10 items-center gap-3 rounded-full border border-border bg-surface px-4 text-xs font-medium text-muted transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
         >
-          متابعة التسوق
-          <FaArrowLeft aria-hidden="true" className="size-3" />
+          متابعة الاستكشاف
+          <FaArrowLeft
+            aria-hidden="true"
+            className="size-3 transition-transform duration-200 motion-safe:group-hover:-translate-x-1 motion-reduce:transition-none"
+          />
         </Link>
       </div>
 
-      {result.items.length < favoriteIds.length && (
-        <p className="mb-5 rounded-control border border-border bg-surface px-4 py-3 text-xs leading-6 text-muted">
-          بعض المنتجات المحفوظة لم تعد متاحة، لذلك لا تظهر هنا.
+      {unavailableCount > 0 && (
+        <p className="mb-6 flex items-start gap-3 rounded-2xl border border-border bg-surface px-4 py-3 text-xs leading-7 text-muted">
+          <FaCircleExclamation
+            aria-hidden="true"
+            className="mt-2 size-3 shrink-0 text-primary"
+          />
+
+          <span>
+            بعض المنتجات المحفوظة غير متاحة حاليًا، لذلك لا تظهر ضمن هذه
+            الاختيارات.
+          </span>
         </p>
       )}
 

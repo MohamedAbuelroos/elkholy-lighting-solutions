@@ -1,0 +1,49 @@
+.track {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.light {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+}
+
+.pending {
+  animation: reveal 0s linear 150ms forwards;
+}
+
+.pending .light {
+  animation: travel 1s ease-in-out infinite;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes travel {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(350%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pending .light {
+    width: 100%;
+    animation: none;
+  }
+}

@@ -1,0 +1,166 @@
+.root {
+  --nav-accent: #edc675;
+  --nav-text: rgb(255 255 255 / 76%);
+  --nav-frame: rgb(255 255 255 / 10%);
+  --nav-frame-background: rgb(255 255 255 / 3%);
+  --nav-active-background: rgb(214 167 68 / 12%);
+  --nav-active-border: rgb(214 167 68 / 22%);
+
+  --nav-button-background: #d6a744;
+  --nav-button-hover: #e2b858;
+  --nav-button-text: #05070b;
+}
+
+.root[data-scrolled="true"] {
+  --nav-accent: var(--primary);
+  --nav-text: var(--muted);
+  --nav-frame: var(--border);
+  --nav-frame-background: var(--surface);
+  --nav-active-background: color-mix(in srgb, var(--primary) 10%, transparent);
+  --nav-active-border: color-mix(in srgb, var(--primary) 22%, transparent);
+
+  --nav-button-background: var(--primary);
+  --nav-button-hover: var(--primary-hover);
+  --nav-button-text: var(--on-primary);
+}
+
+.desktopNav {
+  min-width: 0;
+}
+
+.list {
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  margin: 0;
+  padding: 5px;
+
+  list-style: none;
+  border: 1px solid var(--nav-frame);
+  border-radius: 999px;
+  background: var(--nav-frame-background);
+
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease;
+}
+
+.indicator {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 0;
+  z-index: 0;
+
+  width: 0;
+  border: 1px solid var(--nav-active-border);
+  border-radius: 999px;
+
+  background: var(--nav-active-background);
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    background-color 250ms ease,
+    border-color 250ms ease;
+}
+
+.item {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+/* القاعدة تشمل زر دروب داون المنتجات أيضًا. */
+.root .desktopNav .item :global(.navbar-link) {
+  position: relative;
+
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 10px 13px;
+  border-radius: 999px;
+
+  color: var(--nav-text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+
+  transition:
+    color 220ms ease,
+    background-color 220ms ease;
+}
+
+.root .desktopNav .item :global(.navbar-link):hover {
+  color: var(--nav-accent);
+  background: rgb(214 167 68 / 5%);
+}
+
+.root .desktopNav .item[data-active="true"] :global(.navbar-link) {
+  color: var(--nav-accent);
+  background: transparent;
+}
+
+.root .desktopNav .item :global(.navbar-link):focus-visible {
+  outline: 2px solid var(--nav-accent);
+  outline-offset: 3px;
+}
+
+.contactButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 11px 18px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  background: var(--nav-button-background);
+  color: var(--nav-button-text);
+
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.contactButton:hover {
+  background: var(--nav-button-hover);
+}
+
+.contactButton:focus-visible {
+  outline: 2px solid var(--nav-accent);
+  outline-offset: 4px;
+}
+
+@media (min-width: 1536px) {
+  .root .desktopNav .item :global(.navbar-link) {
+    padding-inline: 16px;
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list,
+  .indicator,
+  .contactButton,
+  .root .desktopNav .item :global(.navbar-link) {
+    transition: none;
+  }
+}

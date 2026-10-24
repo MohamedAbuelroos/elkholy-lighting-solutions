@@ -17,25 +17,28 @@ export function TestimonialsSection() {
       className="section-space border-t border-border bg-background"
     >
       <div className="site-container">
-        <div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mb-8 grid gap-5 lg:mb-10 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16">
           <div>
-            <p className="mb-3 flex items-center gap-3 text-xs font-medium text-primary sm:text-sm">
-              <span aria-hidden="true" className="h-px w-8 bg-primary" />
+            <p className="mb-4 flex items-center gap-3 text-xs font-medium text-primary">
+              <span
+                aria-hidden="true"
+                className="h-px w-8 shrink-0 bg-primary/70"
+              />
               من واقع التجربة
             </p>
 
             <h2
               id="testimonials-title"
-              className="text-4xl font-bold leading-[1.4] text-foreground sm:text-5xl"
+              className="text-[clamp(1.875rem,3vw,2.75rem)] font-bold leading-[1.55] text-foreground"
             >
-              آراء عملائنا，
-              <span className="mt-1 block text-primary">بكلماتهم.</span>
+              التجربة معنا،
+              <span className="block text-primary">يحكيها أصحابها.</span>
             </h2>
           </div>
 
-          <p className="max-w-md text-sm leading-7 text-muted">
-            لكل اختيار تجربة، ولكل مساحة تفاصيل. هنا يشارك عملاؤنا آراءهم عن
-            تجربتهم مع الخولي.
+          <p className="max-w-md text-sm leading-8 text-muted lg:justify-self-end">
+            من أول سؤال إلى اختيار التفاصيل المناسبة، هذه بعض الكلمات التي
+            شاركنا بها عملاؤنا عن تجربتهم مع الخولي.
           </p>
         </div>
 
@@ -43,7 +46,7 @@ export function TestimonialsSection() {
           {visibleTestimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="w-[86%] shrink-0 snap-start sm:w-[calc((100%_-_1rem)/2)] lg:w-[calc((100%_-_2rem)/3)]"
+              className="flex w-[86%] shrink-0 snap-start sm:w-[calc((100%_-_1rem)/2)] lg:w-[calc((100%_-_2rem)/3)]"
             >
               <TestimonialCard testimonial={testimonial} />
             </div>

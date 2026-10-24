@@ -1,34 +1,39 @@
+import { FaComments, FaGem, FaLayerGroup, FaSliders } from "react-icons/fa6";
+
 import { LightTrails } from "@/components/ui/light-trails";
-import { FaGem, FaLayerGroup, FaSliders, FaComments } from "react-icons/fa6";
 
 const benefits = [
   {
     id: "quality",
+    number: "01",
     icon: FaGem,
-    title: "جودة تهتم بالتفاصيل",
+    title: "جودة في التفاصيل",
     description:
-      "نختار منتجاتنا من أرقى العلامات التجارية لضمان الجودة والاستمرارية في الأداء، مع مراعاة التفاصيل التي تناسب مساحتك.",
+      "نختار منتجاتنا بعناية، مع الاهتمام بالخامات وجودة الأداء والتفاصيل التي تكمل جمال المكان.",
   },
   {
     id: "variety",
+    number: "02",
     icon: FaLayerGroup,
-    title: "خيارات متنوعة",
+    title: "مساحة أوسع للاختيار",
     description:
-      "أكثر من 5000 وحدة إضاءة وقطعة تشطيب كهربائي تناسب جميع الأذواق والميزانيات.",
+      "إضاءة وتشطيبات وحلول ذكية بتصميمات متنوعة، لتجد ما يناسب ذوقك واحتياجات مساحتك.",
   },
   {
     id: "selection",
+    number: "03",
     icon: FaSliders,
     title: "اختيار يناسبك",
     description:
-      "نساعدك على اختيار المنتجات التي تناسب طبيعة مساحتك، مع مراعاة الشكل والاستخدام اليومي.",
+      "نساعدك تقارن بين الخيارات، وتوازن بين الشكل والاستخدام اليومي قبل اتخاذ قرارك.",
   },
   {
     id: "contact",
+    number: "04",
     icon: FaComments,
-    title: "تواصل مباشر",
+    title: "فريق تسمع منه",
     description:
-      "تواصل مع فريق الخولي للاستفسار عن المنتجات والمواصفات قبل الاختيار.",
+      "تواصل مباشر مع فريق الخولي للإجابة عن أسئلتك وتوضيح المواصفات وتفاصيل المنتجات.",
   },
 ] as const;
 
@@ -37,77 +42,105 @@ export function WhyElkholy() {
     <section
       id="why-elkholy"
       aria-labelledby="why-elkholy-title"
-      className="section-space border-t border-border bg-background"
+      className="section-space relative isolate overflow-hidden border-t border-border bg-background"
     >
-      <div className="site-container ">
-        {/* Section heading */}
-        <div className="mx-auto mb-8 max-w-xl text-center sm:mb-10">
-          <p className="mb-4 text-sm font-medium tracking-wide text-primary sm:text-base">
+      <div className="site-container">
+        {/* Introduction */}
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="mb-4 flex items-center justify-center gap-3 text-xs font-medium text-primary">
+            <span aria-hidden="true" className="h-px w-6 bg-primary/50" />
             تفاصيل تصنع تجربة أفضل
+            <span aria-hidden="true" className="h-px w-6 bg-primary/50" />
           </p>
 
           <h2
             id="why-elkholy-title"
-            className="text-4xl font-bold leading-[1.35] sm:text-5xl lg:text-6xl"
+            className="text-[clamp(1.875rem,3vw,2.75rem)] font-bold leading-[1.55] text-foreground"
           >
-            لماذا <span className="text-primary">الخولي؟</span>
+            لماذا تختار
+            <span className="text-primary"> الخولي؟</span>
           </h2>
 
-          <p className="mt-4 text-sm leading-7 text-muted">
-            لأن اختيارك لا يتوقف عند شكل المنتج، بل يمتد إلى التفاصيل التي تناسب
-            مساحتك.{" "}
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-8 text-muted">
+            لأن القطعة المناسبة لا تُختار بالشكل وحده. نهتم بما تراه، وما
+            تستخدمه، والتفاصيل التي تعيش معها كل يوم.
           </p>
         </div>
 
-        {/* Benefit cards */}
-        <ul className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        {/* One panel, four benefits */}
+        <ul className="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border bg-border sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
 
             return (
               <li
                 key={benefit.id}
-                className="group relative rounded-2xl border border-border bg-surface p-5 text-right shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg sm:p-6"
+                className="group/benefit relative flex flex-col bg-surface p-6 transition-colors duration-300 hover:bg-surface-elevated motion-reduce:transition-none sm:p-7"
               >
-                <span className="mb-6 flex size-12 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-black">
-                  <Icon aria-hidden="true" className="size-5" />
-                </span>
+                <div className="mb-7 flex items-center justify-between gap-4">
+                  <span
+                    aria-hidden="true"
+                    className="flex size-12 items-center justify-center rounded-2xl border border-primary/20 bg-primary/5 text-primary transition-colors duration-300 group-hover/benefit:border-primary/40 group-hover/benefit:bg-primary/10 motion-reduce:transition-none"
+                  >
+                    <Icon className="size-[18px]" />
+                  </span>
 
-                <h3 className="text-base font-semibold leading-7 text-foreground transition-colors duration-300 group-hover:text-primary sm:text-lg">
+                  <span
+                    aria-hidden="true"
+                    className="text-[10px] font-medium tabular-nums tracking-[0.12em] text-muted/60"
+                  >
+                    {benefit.number}
+                  </span>
+                </div>
+
+                <h3 className="text-base font-medium leading-7 text-foreground transition-colors duration-300 group-hover/benefit:text-primary motion-reduce:transition-none">
                   {benefit.title}
                 </h3>
 
-                <p className="mt-3 text-sm leading-7 text-muted">
+                <p className="mt-3 text-xs leading-7 text-muted">
                   {benefit.description}
                 </p>
 
-                <span
-                  aria-hidden="true"
-                  className="mt-6 block h-px w-10 bg-primary/60 transition-all duration-300 group-hover:w-16"
-                />
+                <div aria-hidden="true" className="mt-auto pt-7">
+                  <span className="block h-px w-8 bg-primary/40 transition-[width,background-color] duration-300 group-hover/benefit:bg-primary motion-safe:group-hover/benefit:w-14 motion-reduce:transition-none" />
+                </div>
               </li>
             );
           })}
         </ul>
-      </div>
 
-      {/* Brand statement with theme-aware light trails */}
-      <div className="relative isolate mt-12 border-t border-border pt-12 text-center sm:mt-16 sm:pt-16">
-        <LightTrails variant="flow" />{" "}
-        <span
-          aria-hidden="true"
-          className="mx-auto mb-7 block h-8 w-px bg-primary/60"
-        />{" "}
-        <p className="mx-auto max-w-5xl text-2xl font-medium leading-[1.8] text-foreground sm:text-3xl lg:text-4xl">
-          نؤمن أن الإضاءة لا تكشف المكان فحسب،{" "}
-          <span className="text-primary"> بل تمنحه روحًا وهوية.</span>{" "}
-        </p>{" "}
-        <p
-          dir="ltr"
-          className="mt-6 text-[10px] font-medium tracking-[0.2em] text-muted sm:text-xs"
-        >
-          ELKHOLY LIGHTING SOLUTIONS{" "}
-        </p>{" "}
+        {/* Brand statement */}
+        <div className="relative isolate mt-10 overflow-hidden px-2 py-10 text-center sm:mt-12 sm:px-8 sm:py-14">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10 opacity-40"
+          >
+            <LightTrails variant="flow" />
+          </div>
+
+          <div
+            aria-hidden="true"
+            className="mb-7 flex items-center justify-center gap-3"
+          >
+            <span className="h-px w-12 bg-gradient-to-l from-primary/50 to-transparent" />
+            <span className="size-1.5 rotate-45 border border-primary/60" />
+            <span className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent" />
+          </div>
+
+          <p className="mx-auto max-w-4xl text-[clamp(1.375rem,2.6vw,2.25rem)] font-medium leading-[1.9] text-foreground">
+            نؤمن أن الإضاءة لا تكشف المكان فحسب،
+            <span className="mt-1 block text-primary">
+              بل تمنحه روحًا وهوية.
+            </span>
+          </p>
+
+          <p
+            dir="ltr"
+            className="mt-7 text-[9px] font-medium leading-6 tracking-[0.22em] text-muted sm:text-[10px]"
+          >
+            ELKHOLY LIGHTING SOLUTIONS
+          </p>
+        </div>
       </div>
     </section>
   );

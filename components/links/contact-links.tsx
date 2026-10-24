@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { FaChevronLeft } from "react-icons/fa6";
+import { FaArrowUpRightFromSquare, FaChevronLeft } from "react-icons/fa6";
 
 import {
   contactCards,
@@ -13,6 +13,7 @@ import { ContactSheet } from "@/components/links/contact-sheet";
 
 export function ContactLinks() {
   const [activeGroup, setActiveGroup] = useState<ContactGroup | null>(null);
+
   const openerRef = useRef<HTMLButtonElement | null>(null);
 
   function closeSheet() {
@@ -25,36 +26,52 @@ export function ContactLinks() {
 
   return (
     <>
-      <section aria-label="وسائل التواصل" className="mt-8 space-y-3">
+      <section aria-label="روابط ووسائل التواصل" className="mt-7 space-y-2.5">
         {contactCards.map((item) => {
           const Icon = item.icon;
 
-          const className = `group flex min-h-24 w-full items-center justify-between gap-3 rounded-2xl border p-4 text-start transition-colors duration-200 sm:px-5 ${
+          const external = !item.group && isWebUrl(item.href);
+
+          const className = `group/contact relative flex min-h-20 w-full items-center justify-between gap-3 overflow-hidden rounded-2xl border px-4 py-3.5 text-start transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none sm:px-5 ${
             item.featured
-              ? "border-primary/25 bg-primary/5 hover:border-primary/50"
-              : "border-border bg-surface hover:border-primary/40"
+              ? "border-primary/30 bg-primary/5 hover:border-primary/60 hover:bg-primary/10"
+              : "border-border bg-surface hover:border-primary/40 hover:bg-surface-elevated"
           }`;
 
           const content = (
             <>
-              <span className="flex min-w-0 items-center gap-3 sm:gap-4">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-primary/15 bg-primary/10 text-primary">
-                  <Icon aria-hidden="true" className="size-5" />
+              <span className="flex min-w-0 items-center gap-3.5">
+                <span
+                  aria-hidden="true"
+                  className={`flex size-11 shrink-0 items-center justify-center rounded-xl border text-primary transition-colors duration-300 motion-reduce:transition-none ${
+                    item.featured
+                      ? "border-primary/25 bg-primary/10"
+                      : "border-primary/15 bg-primary/5 group-hover/contact:border-primary/30"
+                  }`}
+                >
+                  <Icon className="size-[18px]" />
                 </span>
 
                 <span className="min-w-0">
-                  <span className="block text-base font-semibold text-foreground">
+                  <span className="block text-sm font-medium leading-6 text-foreground">
                     {item.title}
                   </span>
 
-                  <span className="mt-1 block truncate text-xs leading-6 text-muted">
+                  <span className="mt-0.5 block truncate text-[11px] leading-6 text-muted">
                     {item.subtitle}
                   </span>
                 </span>
               </span>
 
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary/40">
-                <FaChevronLeft aria-hidden="true" className="size-3" />
+              <span
+                aria-hidden="true"
+                className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border text-muted transition-colors duration-300 group-hover/contact:border-primary/30 group-hover/contact:text-primary motion-reduce:transition-none"
+              >
+                {external ? (
+                  <FaArrowUpRightFromSquare className="size-3" />
+                ) : (
+                  <FaChevronLeft className="size-2.5" />
+                )}
               </span>
             </>
           );
@@ -86,8 +103,6 @@ export function ContactLinks() {
             );
           }
 
-          const external = isWebUrl(item.href);
-
           return (
             <a
               key={item.id}
@@ -97,6 +112,7 @@ export function ContactLinks() {
               className={className}
             >
               {content}
+
               {external && <span className="sr-only">يفتح في تبويب جديد</span>}
             </a>
           );

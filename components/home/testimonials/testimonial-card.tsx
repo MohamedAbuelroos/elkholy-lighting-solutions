@@ -7,39 +7,53 @@ type TestimonialCardProps = {
 };
 
 export function TestimonialCard({ testimonial }: TestimonialCardProps) {
-  return (
-    <figure className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface p-6 lg:p-7">
-      <div className="mb-6 flex items-center gap-4">
-        <FaQuoteRight
-          aria-hidden="true"
-          className="size-7 shrink-0 text-primary/70"
-        />
+  const initial = Array.from(testimonial.name.trim())[0] ?? "خ";
 
-        <span aria-hidden="true" className="h-px flex-1 bg-border" />
+  return (
+    <figure className="group/review relative m-0 flex h-full w-full min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-surface p-6 transition-colors duration-300 hover:border-primary/40 motion-reduce:transition-none sm:p-7">
+      {/* Quote mark */}
+      <div
+        aria-hidden="true"
+        className="mb-6 flex items-center justify-between gap-5"
+      >
+        <FaQuoteRight className="size-8 shrink-0 text-primary/35 transition-colors duration-300 group-hover/review:text-primary/65 motion-reduce:transition-none" />
+
+        <span className="h-px w-12 bg-primary/25" />
       </div>
 
-      <blockquote className="flex-1">
-        <p className="text-sm leading-8 text-foreground">{testimonial.quote}</p>
+      {/* Review */}
+      <blockquote className="m-0 flex-1">
+        <p className="whitespace-pre-line break-words text-sm font-normal leading-[2.2] text-foreground">
+          {testimonial.quote}
+        </p>
       </blockquote>
 
-      <figcaption className="mt-7 flex items-center gap-3 border-t border-border pt-5">
+      {/* Customer */}
+      <figcaption className="mt-8 flex items-center gap-3 border-t border-border pt-5">
         <span
           aria-hidden="true"
-          className="flex size-11 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-lg font-medium text-primary"
+          className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/5 text-base font-medium text-primary"
         >
-          {Array.from(testimonial.name.trim())[0] ?? "خ"}
+          {initial}
         </span>
 
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-foreground">
+          <p className="break-words text-xs font-medium leading-6 text-foreground sm:text-sm">
             {testimonial.name}
           </p>
 
-          <p className="mt-1 text-xs leading-5 text-muted">
-            {testimonial.context}
-          </p>
+          {testimonial.context && (
+            <p className="mt-0.5 break-words text-[11px] leading-6 text-muted">
+              {testimonial.context}
+            </p>
+          )}
         </div>
       </figcaption>
+
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-7 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity duration-300 group-hover/review:opacity-100 motion-reduce:transition-none"
+      />
     </figure>
   );
 }

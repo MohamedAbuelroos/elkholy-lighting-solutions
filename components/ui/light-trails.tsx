@@ -1,3 +1,4 @@
+import { useId } from "react";
 
 type LightTrailsProps = {
   variant?: "flow" | "arc";
@@ -15,49 +16,63 @@ const paths = {
   ],
 } as const;
 
+const layers = [
+  { width: 8, opacity: 0.035 },
+  { width: 3, opacity: 0.08 },
+  { width: 0.8, opacity: 0.2 },
+] as const;
+
 export function LightTrails({
   variant = "flow",
   className = "",
 }: LightTrailsProps) {
+  const gradientId = `trail-${useId().replace(/:/g, "")}`;
+
   return (
     <div
       aria-hidden="true"
-      className={`light-trails pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      style={{ color: "var(--primary)" }}
     >
       <svg
         viewBox="0 0 1200 500"
         preserveAspectRatio="xMidYMid slice"
         focusable="false"
-        className="h-full w-full"
         fill="none"
+        className="block h-full w-full"
       >
-        {/* Wide, soft light */}
-        <g className="light-trails-glow">
-          {paths[variant].map((path) => (
-            <path
-              key={path}
-              d={path}
-              stroke="currentColor"
-              strokeWidth="8"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
-        </g>
+        <defs>
+          <linearGradient
+            id={gradientId}
+            x1="0"
+            y1="0"
+            x2="1200"
+            y2="0"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="currentColor" stopOpacity="0" />
 
-        {/* Fine light lines */}
-        <g className="light-trails-lines">
-          {paths[variant].map((path) => (
-            <path
-              key={path}
-              d={path}
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
-        </g>
+            <stop offset="18%" stopColor="currentColor" stopOpacity="0.8" />
+
+            <stop offset="75%" stopColor="currentColor" stopOpacity="1" />
+
+            <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {layers.map((layer) => (
+          <g
+            key={layer.width}
+            opacity={layer.opacity}
+            stroke={`url(#${gradientId})`}
+            strokeWidth={layer.width}
+            strokeLinecap="round"
+          >
+            {paths[variant].map((path) => (
+              <path key={path} d={path} vectorEffect="non-scaling-stroke" />
+            ))}
+          </g>
+        ))}
       </svg>
     </div>
   );
