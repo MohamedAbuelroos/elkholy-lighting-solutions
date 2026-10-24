@@ -1,7 +1,16 @@
-import { FaArrowLeft, FaLightbulb, FaSliders, FaPlug } from "react-icons/fa6";
-import { company } from "@/data/company";
-import { buildWhatsAppUrl, getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
+import {
+  FaArrowLeft,
+  FaLightbulb,
+  FaPlug,
+  FaSliders,
+} from "react-icons/fa6";
+
 import { LightTrails } from "@/components/ui/light-trails";
+import { company } from "@/data/company";
+import {
+  buildWhatsAppUrl,
+  getPrimaryWhatsAppHref,
+} from "@/lib/utils/whatsapp";
 
 const solutions = [
   {
@@ -10,35 +19,18 @@ const solutions = [
     icon: FaLightbulb,
     title: "إضاءة تكمل التصميم",
     description:
-      "اكتشف وحدات الإضاءة التي تناسب طبيعة مساحتك، وتجمع بين الشكل والاستخدام اليومي.",
-    tags: [
-      "نجف مودرن وكلاسيك",
-      "أباليك",
-      "كشافات",
-      "سبوتات",
-      "إضاءة داخلية",
-      "إضاءة خارجية",
-      "إضاءة معلقة",
-      "إضاءة ذكية",
-    ],
+      "من قطعة تلفت الأنظار إلى إضاءة هادئة تصنع الأجواء، اختَر ما يبرز جمال مساحتك ويناسب استخدامك.",
+    details: ["نجف وأباليك", "إضاءة داخلية وخارجية", "سبوتات وإضاءة معلّقة"],
     message: "مرحبًا، أود الاستفسار عن حلول الإضاءة المناسبة لمساحتي.",
   },
   {
     id: "electrical",
     number: "02",
     icon: FaPlug,
-    title: "تفاصيل كهربائية متناسقة",
+    title: "أناقة في كل تفصيلة",
     description:
-      "اختَر المفاتيح والبرايز والتشطيبات الكهربائية بما يتناسب مع احتياجاتك وطابع المكان.",
-    tags: [
-      "مفاتيح",
-      "برايز",
-      "تشطيبات كهربائية",
-      "أوجه كهربائية",
-      "لوحات كهربائية",
-      "مفاتيح ذكية",
-      "أنظمة صوتيه",
-    ],
+      "مفاتيح وبرايز وتجهيزات كهربائية تتناسق مع التصميم، وتكمل المكان بجودة تلمسها في الاستخدام اليومي.",
+    details: ["مفاتيح وبرايز", "أوجه وتشطيبات", "لوحات وتجهيزات كهربائية"],
     message:
       "مرحبًا، أود الاستفسار عن المفاتيح والبرايز والتشطيبات الكهربائية.",
   },
@@ -46,10 +38,10 @@ const solutions = [
     id: "smart-home",
     number: "03",
     icon: FaSliders,
-    title: "مساحة أكثر ذكاءً",
+    title: "راحة تتحكم فيها",
     description:
-      "تعرّف على خيارات التحكم بالإضاءة والأقفال الذكية، واستفسر عن توافقها مع احتياجات مشروعك.",
-    tags: ["تحكم بالإضاءة", "أقفال ذكية", "منزل ذكي"],
+      "اكتشف خيارات التحكم بالإضاءة والأقفال والأنظمة الذكية، وتعرّف على ما يتوافق مع احتياجات منزلك أو مشروعك.",
+    details: ["تحكم بالإضاءة", "أقفال ذكية", "أنظمة منزلية ذكية"],
     message: "مرحبًا، أود الاستفسار عن الأنظمة الذكية ومدى توافقها مع مشروعي.",
   },
 ] as const;
@@ -65,99 +57,146 @@ export function SolutionsSection() {
       aria-labelledby="solutions-title"
       className="section-space relative isolate overflow-hidden border-t border-border bg-background"
     >
-      <LightTrails variant="flow" />
-      <div className="site-container relative z-10">
-        <div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="mb-3 flex items-center gap-3 text-xs font-medium text-primary sm:text-sm">
-              <span aria-hidden="true" className="h-px w-8 bg-primary" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-40"
+      >
+        <LightTrails variant="arc" />
+      </div>
+
+      <div className="site-container relative">
+        <div className="grid gap-9 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.45fr)] lg:gap-12 xl:gap-20">
+          {/* Section introduction */}
+          <div className="lg:py-7">
+            <p className="mb-4 flex items-center gap-3 text-xs font-medium text-primary">
+              <span
+                aria-hidden="true"
+                className="h-px w-8 shrink-0 bg-primary/70"
+              />
               من المنتج إلى الحل
             </p>
 
             <h2
               id="solutions-title"
-              className="text-4xl font-bold leading-[1.4] text-foreground sm:text-5xl"
+              className="text-[clamp(1.875rem,3vw,2.75rem)] font-bold leading-[1.55] text-foreground"
             >
-              حلول تناسب
-              <span className="mt-1 block text-primary">تفاصيل مشروعك.</span>
+              تفاصيل متناسقة.
+              <span className="block text-primary">
+                تجربة متكاملة.
+              </span>
             </h2>
+
+            <p className="mt-5 max-w-sm text-sm leading-8 text-muted">
+              جمال المكان يبدأ باختيارات تعمل معًا. من الإضاءة إلى
+              التشطيبات والأنظمة الذكية، نساعدك تتعرّف على الخيارات
+              المناسبة لمساحتك.
+            </p>
+
+            <div className="mt-7 max-w-sm border-s border-primary/35 ps-4">
+              <p className="text-xs leading-7 text-muted">
+                بتجهّز بيتك أو بتخطّط لمشروع؟
+                <span className="block font-medium text-foreground">
+                  ابدأ باحتياجك، وخلّينا نفكّر معاك في التفاصيل.
+                </span>
+              </p>
+            </div>
           </div>
 
-          <p className="max-w-md text-sm leading-7 text-muted">
-            كل مساحة لها احتياجات مختلفة. اكتشف مجالات حلولنا، وتواصل معنا
-            للاستفسار عن الخيارات المناسبة لك.
-          </p>
-        </div>
+          {/* Solution rows */}
+          <div className="overflow-hidden rounded-3xl border border-border bg-surface">
+            {solutions.map((solution, index) => {
+              const Icon = solution.icon;
 
-        <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
-          {solutions.map((solution) => {
-            const Icon = solution.icon;
+              const inquiryHref = officialContact
+                ? buildWhatsAppUrl(
+                    officialContact.number,
+                    solution.message,
+                  )
+                : getPrimaryWhatsAppHref();
 
-            const inquiryHref = officialContact
-              ? buildWhatsAppUrl(officialContact.number, solution.message)
-              : getPrimaryWhatsAppHref();
-
-            return (
-              <article
-                key={solution.id}
-                aria-labelledby={`solution-title-${solution.id}`}
-                className="flex h-full flex-col rounded-2xl border border-border bg-surface p-6 lg:p-7"
-              >
-                <div className="mb-7 flex items-center justify-between">
-                  <span className="flex size-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
-                    <Icon aria-hidden="true" className="size-5" />
-                  </span>
-
+              return (
+                <article
+                  key={solution.id}
+                  aria-labelledby={`solution-title-${solution.id}`}
+                  className={`group/solution relative isolate p-5 transition-colors duration-300 hover:bg-surface-elevated focus-within:bg-surface-elevated motion-reduce:transition-none sm:p-7 ${
+                    index !== 0 ? "border-t border-border" : ""
+                  }`}
+                >
+                  {/* Subtle edge accent */}
                   <span
                     aria-hidden="true"
-                    className="text-sm font-medium tabular-nums text-muted"
-                  >
-                    {solution.number}
-                  </span>
-                </div>
+                    className="pointer-events-none absolute inset-y-6 start-0 w-px bg-primary opacity-0 transition-opacity duration-300 group-hover/solution:opacity-100 group-focus-within/solution:opacity-100 motion-reduce:transition-none"
+                  />
 
-                <h3
-                  id={`solution-title-${solution.id}`}
-                  className="text-xl font-semibold leading-8 text-foreground"
-                >
-                  {solution.title}
-                </h3>
+                  <div className="flex items-start gap-4 sm:gap-5">
+                    <div className="flex shrink-0 flex-col items-center gap-4">
+                      <span
+                        aria-hidden="true"
+                        className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/5 text-primary transition-colors duration-300 group-hover/solution:border-primary/40 group-hover/solution:bg-primary/10 motion-reduce:transition-none sm:size-12"
+                      >
+                        <Icon className="size-[18px]" />
+                      </span>
 
-                <p className="mt-3 text-sm leading-7 text-muted">
-                  {solution.description}
-                </p>
+                      <span
+                        aria-hidden="true"
+                        className="text-[10px] font-medium tabular-nums tracking-[0.12em] text-muted/70"
+                      >
+                        {solution.number}
+                      </span>
+                    </div>
 
-                <ul
-                  aria-label="مجالات الحل"
-                  className="mt-5 flex flex-wrap gap-2"
-                >
-                  {solution.tags.map((tag) => (
-                    <li
-                      key={tag}
-                      className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-[11px] leading-5 text-muted"
-                    >
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
+                    <div className="min-w-0 flex-1">
+                      <h3
+                        id={`solution-title-${solution.id}`}
+                        className="text-lg font-medium leading-8 text-foreground transition-colors duration-300 group-hover/solution:text-primary motion-reduce:transition-none sm:text-xl"
+                      >
+                        {solution.title}
+                      </h3>
 
-                <div className="mt-auto pt-7">
-                  <a
-                    href={inquiryHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`استفسر عن ${solution.title} عبر واتساب — يفتح في تبويب جديد`}
-                    className="group flex min-h-11 items-center justify-between gap-3 border-t border-border pt-4 text-sm font-semibold text-primary"
-                  >
-                    استفسر الآن
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-primary/25 transition-colors group-hover:bg-primary group-hover:text-on-primary">
-                      <FaArrowLeft aria-hidden="true" className="size-3.5" />
-                    </span>
-                  </a>
-                </div>
-              </article>
-            );
-          })}
+                      <p className="mt-2 max-w-lg text-xs leading-7 text-muted sm:text-sm">
+                        {solution.description}
+                      </p>
+
+                      <ul
+                        aria-label={`مجالات ${solution.title}`}
+                        className="mt-4 flex flex-wrap gap-x-4 gap-y-2"
+                      >
+                        {solution.details.map((detail) => (
+                          <li
+                            key={detail}
+                            className="flex items-center gap-2 text-[10px] leading-5 text-muted sm:text-[11px]"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="size-1 shrink-0 rounded-full bg-primary/60"
+                            />
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <a
+                        href={inquiryHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`تحدث معنا عن ${solution.title} عبر واتساب — يفتح في تبويب جديد`}
+                        className="group/link relative z-10 mt-4 inline-flex min-h-11 items-center gap-3 rounded-full text-xs font-medium text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                      >
+                        تحدث معنا عن احتياجك
+
+                        <span className="flex size-7 items-center justify-center rounded-full border border-primary/25 transition-colors duration-300 group-hover/link:border-primary group-hover/link:bg-primary group-hover/link:text-on-primary motion-reduce:transition-none">
+                          <FaArrowLeft
+                            aria-hidden="true"
+                            className="size-2.5 transition-transform duration-300 motion-safe:group-hover/link:-translate-x-0.5 motion-reduce:transition-none"
+                          />
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

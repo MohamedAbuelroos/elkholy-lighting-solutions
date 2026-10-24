@@ -35,7 +35,7 @@ export function CatalogHelpBanner({ categoryName }: CatalogHelpBannerProps) {
       
       <div className="site-container">
         <div className="relative isolate overflow-hidden rounded-2xl border border-primary/20 bg-surface">
-          <LightTrails variant="arc" className="pointer-events-none" />
+          <LightTrails variant="flow" className="pointer-events-none" />
 
           {/* Subtle accent line */}
           <span

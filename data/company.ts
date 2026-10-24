@@ -15,7 +15,7 @@ export const company = {
     {
       name: "Elkholy Lighting Solutions",
       label: "الرقم الرئيسي",
-      number: "+201006786986",
+      number: "+201004735355",
     },
     {
       name: "علاء الخولي",
@@ -25,7 +25,7 @@ export const company = {
     {
       name: "إبراهيم الخولي",
       label: "للتواصل والاستفسارات",
-      number: "+201004735355",
+      number: "+201002393901",
     },
     {
       name: "خدمة العملاء",
@@ -38,7 +38,7 @@ export const company = {
     {
       name: "Elkholy Lighting Solutions",
       label: "Official WhatsApp",
-      number: "+201006786986",
+      number: "+201004735355",
     },
     {
       name: "Alaa Elkholy",

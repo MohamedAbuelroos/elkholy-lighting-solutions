@@ -1,0 +1,71 @@
+.root {
+  display: flex;
+  min-height: 65svh;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 1.5rem 4rem;
+}
+
+.content {
+  width: 100%;
+  max-width: 22rem;
+  text-align: center;
+}
+
+.brand {
+  color: var(--primary);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+}
+
+.subtitle {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+}
+
+.track {
+  position: relative;
+  width: 8rem;
+  height: 2px;
+  margin: 2rem auto 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.light {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 45%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  animation: travel 1.5s ease-in-out infinite;
+}
+
+.message {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+
+@keyframes travel {
+  from {
+    transform: translateX(-110%);
+  }
+
+  to {
+    transform: translateX(330%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light {
+    left: 27.5%;
+    animation: none;
+  }
+}
