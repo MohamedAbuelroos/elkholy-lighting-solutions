@@ -4,12 +4,24 @@ import Link from "next/link";
 
 import { logout } from "@/app/login/actions";
 import { requireAdmin } from "@/lib/auth/require-admin";
+import { AdminInstallButton } from "@/components/admin/admin-install-button";
 
 export const metadata: Metadata = {
   title: {
     default: "لوحة الإدارة | الخولي",
     template: "%s | إدارة الخولي",
   },
+
+  manifest: "/management.webmanifest",
+
+  applicationName: "إدارة الخولي",
+
+  appleWebApp: {
+    capable: true,
+    title: "إدارة الخولي",
+    statusBarStyle: "default",
+  },
+
   robots: {
     index: false,
     follow: false,
@@ -149,6 +161,7 @@ export default async function AdminLayout({
           >
             {user.email}
           </p>
+          <AdminInstallButton />
         </aside>
 
         <main id="admin-content" tabIndex={-1} className="min-w-0">
