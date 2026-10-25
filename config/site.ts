@@ -3,12 +3,12 @@ import { company } from "@/data/company";
 export const siteConfig = {
   name: company.name,
   nameAr: company.nameAr,
-  url: "https://elkholylightingsolutions.com",
+  url: "https://www.elkholylightingsolutions.com",
   description: company.tagline,
   locale: "ar",
   currency: "EGP",
   logo: {
-    src: "/logo/logo-elkholy.jpg",
+    src: "/logo/ELKHOLY.png",
     alt: company.nameAr,
   },
   hero: {
