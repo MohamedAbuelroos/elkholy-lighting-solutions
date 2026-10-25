@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { Navbar } from "@/components/layout/navbar";
+import { InstallPrompt } from "@/components/pwa/install-prompt";
 
 type WebsiteLayoutProps = {
   children: ReactNode;
@@ -28,6 +29,7 @@ export default function WebsiteLayout({ children }: WebsiteLayoutProps) {
 
       <Footer />
       <FloatingWhatsApp />
+      <InstallPrompt />
     </>
   );
 }

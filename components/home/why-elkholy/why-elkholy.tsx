@@ -57,7 +57,7 @@ export function WhyElkholy() {
             id="why-elkholy-title"
             className="text-[clamp(1.875rem,3vw,2.75rem)] font-bold leading-[1.55] text-foreground"
           >
-            لماذا تختار
+            لماذا
             <span className="text-primary"> الخولي؟</span>
           </h2>
 

@@ -66,9 +66,9 @@ export function NavbarClient({ categories }: NavbarClientProps) {
           <Image
             src={siteConfig.logo.src}
             alt=""
-            width={74}
-            height={74}
-            className="size-12 shrink-0 rounded-control object-contain sm:size-16"
+            width={94}
+            height={94}
+            className="size-12 shrink-0 rounded-control object-contain sm:size-20"
           />
 
           <div dir="ltr" className="hidden min-w-0 text-start sm:block">
