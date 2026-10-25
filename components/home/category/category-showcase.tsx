@@ -1,158 +1,173 @@
 import Image from "next/image";
-import { FaArrowLeft } from "react-icons/fa6";
+import Link from "next/link";
+import { FaArrowLeft, FaLayerGroup } from "react-icons/fa6";
 
-import { company } from "@/data/company";
+import { LightTrails } from "@/components/ui/light-trails";
+import { getCategoryPath, routes } from "@/config/routes";
 import { getRootCategories } from "@/lib/queries/categories";
-import { buildWhatsAppUrl, getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 
 export async function CategoryShowcase() {
   const categories = await getRootCategories();
 
   if (categories.length === 0) return null;
 
-  const officialContact = company.whatsapp.find(
-    (contact) => contact.name === company.name,
-  );
+  const visibleCategories = categories.slice(0, 5);
+  const count = visibleCategories.length;
+  const useMosaic = count === 3 || count === 5;
 
   return (
     <section
       id="categories"
       aria-labelledby="categories-title"
-      className="section-space bg-background"
+      className="section-space relative isolate overflow-hidden bg-background"
     >
       <div className="site-container">
-        {/* Section heading */}
-        <div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="mb-3 flex items-center gap-3 text-xs font-medium text-primary sm:text-sm">
-              <span aria-hidden="true" className="h-px w-8 bg-primary" />
-              تفاصيل تصنع الفرق
-            </p>
+        <div
+          dir="ltr"
+          className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.65fr)_minmax(260px,0.9fr)] lg:gap-10 xl:gap-16"
+        >
+          <div dir="rtl" className="relative isolate order-1 lg:order-2">
+            <LightTrails variant="arc" className="hidden opacity-60 lg:block" />
 
-            <h2
-              id="categories-title"
-              className="text-4xl font-bold leading-[1.4] text-foreground sm:text-5xl"
-            >
-              لكل مساحة，
-              <span className="mt-1 block text-primary">اضاءة تليق بها.</span>
-            </h2>
+            <div className="relative z-10 lg:py-8">
+              <p className="mb-4 flex items-center gap-3 text-xs font-medium text-primary">
+                <span
+                  aria-hidden="true"
+                  className="h-px w-8 shrink-0 bg-primary"
+                />
+                تفاصيل تصنع الفرق
+              </p>
+
+              <h2
+                id="categories-title"
+                className="text-3xl font-bold leading-[1.6] text-foreground sm:text-4xl xl:text-[42px]"
+              >
+                لكل مساحة،
+                <span className="block text-primary">إضاءة تليق بها.</span>
+              </h2>
+
+              <p className="mt-5 max-w-md text-sm leading-8 text-muted">
+                من الإضاءة إلى التشطيبات الكهربائية والحلول الذكية، اختيارات
+                تجمع بين جمال التصميم وراحة الاستخدام.
+              </p>
+
+              <Link
+                href={routes.products}
+                className="group mt-6 inline-flex min-h-12 items-center gap-4 rounded-full border border-primary/35 bg-primary/5 px-5 py-3 text-xs font-medium text-primary transition-colors duration-200 hover:border-primary hover:bg-primary hover:text-on-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              >
+                استكشف جميع الفئات
+                <FaArrowLeft
+                  aria-hidden="true"
+                  className="size-3 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-x-1"
+                />
+              </Link>
+            </div>
           </div>
 
-          <p className="max-w-md text-sm leading-7 text-muted">
-            من الإضاءة والتشطيبات الكهربائية إلى الأنظمة الذكية والصوتية، اكتشف
-            ما يناسب منزلك أو مشروعك.
-          </p>
-        </div>
+          {/* صور الفئات */}
+          <div
+            dir="ltr"
+            className="order-2 grid min-w-0 grid-cols-2 gap-3 sm:gap-4 lg:order-1"
+          >
+            {visibleCategories.map((category, index) => {
+              const isFeatured = index === 0 && (useMosaic || count === 1);
 
-        {/* RTL places the first, featured card on the right */}
-        <div className="grid gap-4 md:grid-cols-2">
-          {categories.map((category, index) => {
-            const isLead = index === 0;
+              const placementClass =
+                count === 1
+                  ? "col-span-2 min-h-[300px] sm:min-h-[360px]"
+                  : isFeatured
+                    ? "col-span-2 min-h-[280px] sm:min-h-[320px] lg:col-span-1 lg:row-span-2 lg:min-h-[360px]"
+                    : count === 2
+                      ? "min-h-[220px] sm:min-h-[280px] lg:min-h-[320px]"
+                      : "min-h-[180px] sm:min-h-[200px] lg:min-h-[172px]";
 
-            const inquiryHref = officialContact
-              ? buildWhatsAppUrl(
-                  officialContact.number,
-                  `مرحبًا، أود الاستفسار عن ${category.name_ar} من خلال موقع الخولي.`,
-                )
-              : getPrimaryWhatsAppHref();
+              const imageSizes =
+                count === 1
+                  ? "(min-width: 1440px) 860px, (min-width: 1024px) 62vw, 100vw"
+                  : isFeatured
+                    ? "(min-width: 1440px) 420px, (min-width: 1024px) 30vw, 100vw"
+                    : "(min-width: 1440px) 420px, (min-width: 1024px) 30vw, 50vw";
 
-            return (
-              <a
-                key={category.id}
-                href={inquiryHref}
-                aria-labelledby={`category-title-${category.id}`}
-                aria-describedby={`category-action-${category.id}`}
-                className={`group relative isolate [transform:translateZ(0)] flex flex-col justify-end overflow-hidden rounded-card border border-border bg-surface ${
-                  isLead
-                    ? "min-h-[380px] md:row-span-3 md:min-h-0"
-                    : "min-h-[240px] md:min-h-[200px]"
-                }`}
-              >
-                {category.image_path && (
-                  <Image
-                    src={category.image_path}
-                    alt=""
-                    fill
-                    sizes="(min-width: 1280px) 600px, (min-width: 768px) 50vw, 100vw"
-                    className="-z-20 object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none"
-                  />
-                )}
-
-                {/* Image contrast stays consistent in both themes */}
-                <div
-                  aria-hidden="true"
-                  className={`pointer-events-none absolute -inset-px -z-10 [transform:translateZ(0)] [backface-visibility:hidden] ${
-                    isLead
-                      ? "bg-gradient-to-t from-black/95 via-black/30 to-black/10"
-                      : "bg-[linear-gradient(to_left,rgba(0,0,0,0.88),rgba(0,0,0,0.55)_60%,rgba(0,0,0,0.20))]"
-                  }`}
-                />
-
-                {/* Card number and English name */}
-                <div className="absolute inset-x-5 top-5 flex flex-col items-end gap-2">
-                  <span
-                    aria-hidden="true"
-                    className="text-xs font-medium tabular-nums text-white/55"
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  {category.name_en && (
-                    <p
-                      dir="ltr"
-                      className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#E2B858]"
-                    >
-                      {category.name_en}
-                    </p>
-                  )}
-                </div>
-
-                <div
-                  className={
-                    isLead
-                      ? "px-6 pb-6 pt-20 lg:px-8 lg:pb-8"
-                      : "px-5 pb-5 pt-20 lg:px-6 lg:pb-6"
-                  }
+              return (
+                <Link
+                  key={category.id}
+                  href={getCategoryPath(category.slug)}
+                  aria-label={`استعرض منتجات ${category.name_ar}`}
+                  className={`group relative isolate flex min-w-0 flex-col justify-end overflow-hidden rounded-2xl border border-border bg-[#11151C] transition-colors duration-300 hover:border-primary/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${placementClass}`}
                 >
-                  <h3
-                    id={`category-title-${category.id}`}
-                    className={`font-semibold leading-[1.4] text-white ${
-                      isLead ? "text-3xl lg:text-4xl" : "text-xl lg:text-2xl"
-                    }`}
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 overflow-hidden"
                   >
-                    {category.name_ar}
-                  </h3>
+                    {category.image_path ? (
+                      <Image
+                        src={category.image_path}
+                        alt=""
+                        fill
+                        sizes={imageSizes}
+                        className="scale-[1.01] object-cover [backface-visibility:hidden] motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-out motion-safe:group-hover:scale-[1.045]"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/10 to-transparent">
+                        <FaLayerGroup className="size-16 text-white/10" />
+                      </div>
+                    )}
+                  </div>
 
-                  {category.description_ar && (
-                    <p
-                      className={`mt-2 max-w-md text-sm leading-6 text-white/75 ${
-                        isLead ? "" : "line-clamp-2"
-                      }`}
-                    >
-                      {category.description_ar}
-                    </p>
-                  )}
+                  {/* طبقة ثابتة لتجنب رعشة الحواف أثناء الهوفر */}
+                  <div
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute -inset-px [transform:translateZ(0)] ${
+                      isFeatured
+                        ? "bg-gradient-to-t from-black/90 via-black/25 to-black/5"
+                        : "bg-gradient-to-t from-black/90 via-black/35 to-black/5"
+                    }`}
+                  />
 
                   <div
-                    className={`flex items-center justify-between gap-3 ${
-                      isLead ? "mt-6 border-t border-white/20 pt-4" : "mt-3"
+                    dir="rtl"
+                    className={`relative z-10 ${
+                      isFeatured ? "p-5 sm:p-6 lg:p-7" : "p-4 sm:p-5"
                     }`}
                   >
-                    <span
-                      id={`category-action-${category.id}`}
-                      className="text-xs font-medium text-white/85 sm:text-sm"
-                    >
-                      استفسر عن {category.name_ar}
-                    </span>
+                    <div className="flex items-end justify-between gap-3">
+                      <div className="min-w-0">
+                        {isFeatured && (
+                          <span
+                            aria-hidden="true"
+                            className="mb-4 block h-px w-8 bg-[#E2B858]/80"
+                          />
+                        )}
 
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/25 text-white transition-colors duration-200 group-hover:border-[#D6A744] group-hover:bg-[#D6A744] group-hover:text-[#05070B]">
-                      <FaArrowLeft aria-hidden="true" className="size-3.5" />
-                    </span>
+                        <h3
+                          className={`break-words font-medium text-white transition-colors duration-300 group-hover:text-[#E2B858] ${
+                            isFeatured
+                              ? "text-2xl leading-[1.5] sm:text-3xl"
+                              : "text-sm leading-7 sm:text-base"
+                          }`}
+                        >
+                          {category.name_ar}
+                        </h3>
+
+                        {isFeatured && category.description_ar && (
+                          <p className="mt-3 line-clamp-2 max-w-sm text-xs leading-7 text-white/75">
+                            {category.description_ar}
+                          </p>
+                        )}
+                      </div>
+
+                      <span
+                        aria-hidden="true"
+                        className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/25 bg-black/10 text-white transition-colors duration-300 group-hover:border-[#D6A744] group-hover:bg-[#D6A744] group-hover:text-[#05070B]"
+                      >
+                        <FaArrowLeft className="size-3 motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:-translate-x-0.5" />
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </a>
-            );
-          })}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

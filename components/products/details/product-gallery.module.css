@@ -1,0 +1,19 @@
+.image {
+  animation: image-enter 220ms ease-out both;
+}
+
+@keyframes image-enter {
+  from {
+    opacity: 0.5;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    animation: none;
+  }
+}

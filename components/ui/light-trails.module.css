@@ -1,0 +1,101 @@
+.root {
+  --trail-color: #d6a744;
+  --trail-highlight: #f2d18a;
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--trail-color);
+}
+
+:global(:root[data-theme="light"]) .root {
+  --trail-color: #a87916;
+  --trail-highlight: #b78324;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* طبقات ثابتة تمنح الخط عمقًا بدون blur. */
+.halo {
+  opacity: 0.035;
+}
+
+.soft {
+  opacity: 0.08;
+}
+
+.line {
+  opacity: 0.23;
+}
+
+:global(:root[data-theme="light"]) .halo {
+  opacity: 0.025;
+}
+
+:global(:root[data-theme="light"]) .soft {
+  opacity: 0.055;
+}
+
+:global(:root[data-theme="light"]) .line {
+  opacity: 0.16;
+}
+
+/* اللمعة مخفية قبل دخول السكشن للشاشة. */
+.spark {
+  stroke: var(--trail-highlight);
+  stroke-dasharray: 8 120;
+  stroke-dashoffset: 10;
+  opacity: 0;
+}
+
+.root[data-started="true"] .spark {
+  animation: light-pass 3.2s ease-in-out both;
+  animation-play-state: paused;
+}
+
+.root[data-started="true"] .spark:nth-child(2) {
+  animation-delay: 350ms;
+}
+
+/* تكمل الحركة من نفس موضعها عند العودة للشاشة. */
+.root[data-visible="true"] .spark {
+  animation-play-state: running;
+}
+
+@keyframes light-pass {
+  0% {
+    stroke-dashoffset: 10;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.65;
+  }
+
+  75% {
+    opacity: 0.65;
+  }
+
+  100% {
+    stroke-dashoffset: -110;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-started="true"] .spark {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+@media print {
+  .root {
+    display: none;
+  }
+}

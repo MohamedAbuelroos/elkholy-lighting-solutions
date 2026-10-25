@@ -15,7 +15,7 @@ export const company = {
     {
       name: "Elkholy Lighting Solutions",
       label: "الرقم الرئيسي",
-      number: "+201006786986",
+      number: "+201004735355",
     },
     {
       name: "علاء الخولي",
@@ -25,7 +25,7 @@ export const company = {
     {
       name: "إبراهيم الخولي",
       label: "للتواصل والاستفسارات",
-      number: "+201004735355",
+      number: "+201002393901",
     },
     {
       name: "خدمة العملاء",
@@ -38,7 +38,7 @@ export const company = {
     {
       name: "Elkholy Lighting Solutions",
       label: "Official WhatsApp",
-      number: "+201006786986",
+      number: "+201004735355",
     },
     {
       name: "Alaa Elkholy",
@@ -56,13 +56,13 @@ export const company = {
     {
       name: "معرض الخولي - الفرع الأول",
       address: "البحيرة - دمنهور - شارع 23 يوليو - بجوار المحكمة القديمة",
-      maps: "#",
+      maps: "https://maps.app.goo.gl/Q9idP8bbjdrM3DDu9",
     },
     {
       name: "معرض الخولي - الفرع الثاني",
       address:
         "البحيرة - دمنهور - شارع عبدالسلام الشاذلى برج ايفي - امام سور النادى الاجتماعى",
-      maps: "#",
+      maps: "https://maps.app.goo.gl/L2tYMQjgSdm1RU8C6",
     },
   ],
 

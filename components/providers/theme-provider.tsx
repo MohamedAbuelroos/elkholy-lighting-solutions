@@ -10,7 +10,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       defaultTheme="dark"
       enableSystem={false}
       storageKey="elkholy-theme"
-      
     >
       {children}
     </NextThemesProvider>

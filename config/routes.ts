@@ -1,22 +1,22 @@
 export const routes = {
   home: "/",
   products: "/products",
-  categories: "/categories",
-  services: "/services",
+  categories: "/products",
+  services: "/#solutions",
   projects: "/projects",
   about: "/about",
-  branches: "/branches",
   contact: "/contact",
+  branches: "/contact#branches",
   links: "/links",
+  favorites: "/favorites",
 } as const;
 
 export const mainNavigation = [
   { label: "الرئيسية", href: routes.home },
   { label: "المنتجات", href: routes.products },
-  { label: "خدماتنا", href: routes.services },
   { label: "مشاريعنا", href: routes.projects },
-  { label: "عن الخولي", href: routes.about },
-  { label: "فروعنا", href: routes.branches },
+  { label: "من نحن", href: routes.about },
+  { label: "تواصل معنا", href: routes.contact },
 ] as const;
 
 export function getProductPath(slug: string): string {
@@ -24,9 +24,5 @@ export function getProductPath(slug: string): string {
 }
 
 export function getCategoryPath(slug: string): string {
-  return `${routes.categories}/${encodeURIComponent(slug)}`;
-}
-
-export function getProjectPath(slug: string): string {
-  return `${routes.projects}/${encodeURIComponent(slug)}`;
+  return `${routes.products}?category=${encodeURIComponent(slug)}`;
 }

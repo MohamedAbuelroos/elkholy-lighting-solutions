@@ -35,7 +35,7 @@ export function StatsSection() {
                 {stat.label}
               </dt>
 
-              <dd className="order-1 text-3xl font-semibold leading-tight tracking-tight text-primary tabular-nums sm:text-4xl lg:text-5xl">
+              <dd className="order-1 text-3xl font-bold leading-tight tracking-tight text-primary tabular-nums sm:text-4xl lg:text-5xl">
                 <span dir="ltr" className="inline-block">
                   {numberFormatter.format(stat.value)}
                 </span>
