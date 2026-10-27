@@ -14,6 +14,8 @@ export type AdminProduct = Pick<
   | "slug"
   | "sku"
   | "price"
+  | "discount_percent"
+  | "sale_price"
   | "is_active"
   | "is_featured"
   | "is_popular"
@@ -107,6 +109,8 @@ export async function getAdminProducts({
         slug,
         sku,
         price,
+        discount_percent,
+        sale_price,
         is_active,
         is_featured,
         is_popular,
@@ -190,6 +194,7 @@ export async function getAdminProductById(productId: string) {
         description_en,
         sku,
         price,
+        discount_percent,
         sort_order,
         is_active,
         is_featured,

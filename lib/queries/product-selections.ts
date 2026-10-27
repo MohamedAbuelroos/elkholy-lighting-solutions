@@ -48,6 +48,9 @@ export function toProduct(row: ProductWithImages): Product {
     sku: row.sku,
     price: row.price,
 
+    discount_percent: row.discount_percent,
+    sale_price: row.sale_price,
+
     images: sortedImages.map((image) => ({
       src: image.src,
       alt: image.alt,

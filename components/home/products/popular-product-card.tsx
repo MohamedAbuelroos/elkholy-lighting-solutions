@@ -24,6 +24,11 @@ export function PopularProductCard({
 }: PopularProductCardProps) {
   const image = product.images[0];
 
+  const isDiscounted =
+    product.discount_percent > 0 &&
+    product.price !== null &&
+    product.sale_price !== null;
+
   return (
     <div className="relative h-full">
       <Link
@@ -48,12 +53,20 @@ export function PopularProductCard({
               </div>
             )}
 
-            {product.is_popular && (
-              <span className="absolute start-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-[#E2B858]/40 bg-[#25190D]/80 px-2.5 py-1 text-[10px] font-medium text-[#F0C573] backdrop-blur-md">
-                <FaStar aria-hidden="true" className="size-2.5" />
-                شائع
-              </span>
-            )}
+            <div className="pointer-events-none absolute start-3 end-14 top-3 flex flex-wrap items-center gap-1.5">
+              {product.is_popular && (
+                <span className="inline-flex min-h-7 items-center gap-1.5 rounded-full border border-[#E2B858]/40 bg-[#25190D]/80 px-2.5 text-[10px] font-medium text-[#F0C573] backdrop-blur-md">
+                  <FaStar aria-hidden="true" className="size-2.5" />
+                  شائع
+                </span>
+              )}
+
+              {isDiscounted && (
+                <span className="inline-flex min-h-7 items-center rounded-full border border-[#E2B858]/40 bg-[#D6A744] px-2.5 text-[10px] font-semibold text-[#05070B]">
+                  خصم {product.discount_percent}٪
+                </span>
+              )}
+            </div>
 
             {/* Category on the image */}
             <span className="absolute bottom-3 start-3 max-w-[calc(100%-1.5rem)] truncate rounded-full border border-white/20 bg-black/65 px-3 py-1.5 text-[10px] font-medium text-white backdrop-blur-md">
@@ -82,16 +95,38 @@ export function PopularProductCard({
 
             <div className="mt-auto pt-1">
               <div className="flex items-center justify-between gap-2">
-                <p
-                  className={`min-w-0 font-semibold tabular-nums text-primary ${
-                    product.price !== null ? "text-base" : "text-xs text-muted"
-                  }`}
-                >
-                  {product.price !== null
-                    ? priceFormatter.format(product.price)
-                    : "السعر عند الاستفسار"}
-                </p>
+                <div className="min-w-0">
+                  {isDiscounted &&
+                  product.price !== null &&
+                  product.sale_price !== null ? (
+                    <>
+                      <p className="text-[14px] leading-5 text-muted">
+                        <span className="sr-only">السعر قبل الخصم: </span>
 
+                        <del className="tabular-nums">
+                          {priceFormatter.format(product.price)}
+                        </del>
+                      </p>
+
+                      <p className="text-md font-semibold leading-6 tabular-nums text-primary sm:text-base">
+                        <span className="sr-only">السعر بعد الخصم: </span>
+                        {priceFormatter.format(product.sale_price)}
+                      </p>
+                    </>
+                  ) : (
+                    <p
+                      className={`font-semibold leading-6 tabular-nums ${
+                        product.sale_price !== null
+                          ? "text-sm text-primary sm:text-base"
+                          : "text-xs text-muted"
+                      }`}
+                    >
+                      {product.sale_price !== null
+                        ? priceFormatter.format(product.sale_price)
+                        : "السعر عند الاستفسار"}
+                    </p>
+                  )}
+                </div>
                 <span
                   aria-hidden="true"
                   className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary group-focus-visible:border-primary group-focus-visible:bg-primary group-focus-visible:text-on-primary"

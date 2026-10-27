@@ -33,6 +33,7 @@ async function saveProduct(
   const descriptionEn = getText(formData, "description_en");
   const sku = getText(formData, "sku");
   const priceText = getText(formData, "price");
+  const discountPercentText = getText(formData, "discount_percent");
   const sortOrderText = getText(formData, "sort_order");
 
   if (!nameAr || nameAr.length > 200) {
@@ -81,6 +82,26 @@ async function saveProduct(
     price = Number(priceText);
   }
 
+  if (!/^\d{1,2}$/.test(discountPercentText)) {
+    return {
+      error: "اكتب نسبة خصم صحيحة من 0 إلى 99.",
+    };
+  }
+
+  const discountPercent = Number(discountPercentText);
+
+  if (discountPercent > 99) {
+    return {
+      error: "نسبة الخصم يجب أن تكون من 0 إلى 99.",
+    };
+  }
+
+  if (discountPercent > 0 && price === null) {
+    return {
+      error: "حدد سعر المنتج أولًا لتطبيق الخصم.",
+    };
+  }
+
   if (!/^\d+$/.test(sortOrderText)) {
     return {
       error: "ترتيب الظهور يجب أن يكون عددًا صحيحًا يبدأ من صفر.",
@@ -126,6 +147,7 @@ async function saveProduct(
     description_en: descriptionEn || null,
     sku: sku || null,
     price,
+    discount_percent: discountPercent,
     sort_order: sortOrder,
     is_featured: formData.get("is_featured") === "on",
     is_popular: formData.get("is_popular") === "on",
@@ -150,6 +172,9 @@ async function saveProduct(
   if (result.error) {
     console.error("Failed to save product", {
       code: result.error.code,
+      message: result.error.message,
+      details: result.error.details,
+      hint: result.error.hint,
     });
 
     if (result.error.code === "23505") {
