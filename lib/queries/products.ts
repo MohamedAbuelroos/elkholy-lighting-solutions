@@ -148,7 +148,7 @@ export async function getCatalog({
     }
 
     if (sort === "price-asc" || sort === "price-desc") {
-      request = request.order("price", {
+      request = request.order("sale_price", {
         ascending: sort === "price-asc",
         nullsFirst: false,
       });

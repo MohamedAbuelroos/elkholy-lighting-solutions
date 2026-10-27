@@ -21,6 +21,7 @@ type ProductInformationProps = {
 const priceFormatter = new Intl.NumberFormat("ar-EG", {
   style: "currency",
   currency: "EGP",
+  minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
 
@@ -30,6 +31,10 @@ export function ProductInformation({
   productUrl,
   whatsappHref,
 }: ProductInformationProps) {
+  const isDiscounted =
+    product.discount_percent > 0 &&
+    product.price !== null &&
+    product.sale_price !== null;
   return (
     <div className="min-w-0">
       {/* Category and popularity */}
@@ -72,19 +77,41 @@ export function ProductInformation({
 
       {/* Price */}
       <div className="mt-6 border-t border-border pt-6">
-        <p className="text-[11px] leading-6 text-muted">
-          {product.price !== null ? "سعر الوحدة المعروض" : "تفاصيل السعر"}
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="text-[11px] leading-6 text-muted">
+            {product.sale_price !== null
+              ? "سعر الوحدة المعروض"
+              : "تفاصيل السعر"}
+          </p>
+
+          {isDiscounted && (
+            <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[10px] font-medium text-primary">
+              خصم {product.discount_percent}٪
+            </span>
+          )}
+        </div>
+
+        {isDiscounted && product.price !== null && (
+          <p className="mt-3 text-sm leading-6 text-muted">
+            <span className="sr-only">السعر قبل الخصم: </span>
+
+            <del className="tabular-nums">
+              {priceFormatter.format(product.price)}
+            </del>
+          </p>
+        )}
 
         <p
           className={`mt-2 font-medium leading-relaxed text-foreground ${
-            product.price !== null
+            product.sale_price !== null
               ? "text-3xl tabular-nums sm:text-4xl"
               : "text-xl sm:text-2xl"
           }`}
         >
-          {product.price !== null
-            ? priceFormatter.format(product.price)
+          {isDiscounted && <span className="sr-only">السعر بعد الخصم: </span>}
+
+          {product.sale_price !== null
+            ? priceFormatter.format(product.sale_price)
             : "السعر عند الاستفسار"}
         </p>
       </div>
@@ -96,7 +123,7 @@ export function ProductInformation({
           productId={product.id}
           productName={product.name_ar}
           sku={product.sku}
-          price={product.price}
+          price={product.sale_price}
           productUrl={productUrl}
           whatsappHref={whatsappHref}
         />

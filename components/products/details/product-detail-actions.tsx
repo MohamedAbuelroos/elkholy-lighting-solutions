@@ -21,6 +21,7 @@ const MAX_QUANTITY = 999;
 const priceFormatter = new Intl.NumberFormat("ar-EG", {
   style: "currency",
   currency: "EGP",
+  minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
 

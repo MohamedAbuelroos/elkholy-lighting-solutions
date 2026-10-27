@@ -89,6 +89,7 @@ export default async function EditProductPage({
           description_en: product.description_en ?? "",
           sku: product.sku ?? "",
           price: product.price === null ? "" : String(product.price),
+          discount_percent: String(product.discount_percent),
           sort_order: String(product.sort_order),
           is_featured: product.is_featured,
           is_popular: product.is_popular,

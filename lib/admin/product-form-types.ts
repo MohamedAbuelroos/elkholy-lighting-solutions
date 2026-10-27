@@ -11,6 +11,7 @@ export type ProductFormValues = {
   description_en: string;
   sku: string;
   price: string;
+  discount_percent: string;
   sort_order: string;
   is_featured: boolean;
   is_popular: boolean;
