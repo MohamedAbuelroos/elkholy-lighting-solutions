@@ -108,8 +108,6 @@ export function ProductsTable({
                     product.sale_price !== null ? (
                     <div className="space-y-1.5">
                       <p className="text-xs text-muted">
-                        <span>الأصلي: </span>
-
                         <del className="tabular-nums">
                           {priceFormatter.format(product.price)}
                         </del>
