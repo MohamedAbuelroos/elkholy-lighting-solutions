@@ -14,6 +14,7 @@ import { FavoritesEmpty } from "@/components/products/favorites/favorites-empty"
 import { FavoritesSkeleton } from "@/components/products/favorites/favorites-skeleton";
 import { routes } from "@/config/routes";
 import { useFavorites } from "@/hooks/use-favorites";
+import { removeFavorites } from "@/lib/favorites/store";
 
 type FavoriteItems = Awaited<ReturnType<typeof loadFavoriteProducts>>;
 
@@ -111,14 +112,34 @@ export function FavoritesContent() {
     );
   }
 
-  if (result.items.length === 0) {
-    return <FavoritesEmpty hasUnavailableProducts={favoriteIds.length > 0} />;
-  }
+  const availableIds = new Set(result.items.map(({ product }) => product.id));
 
-  const unavailableCount = Math.max(
-    0,
-    favoriteIds.length - result.items.length,
-  );
+  const unavailableIds = favoriteIds.filter((id) => !availableIds.has(id));
+
+  const unavailableCount = unavailableIds.length;
+
+  const cleanupButton =
+    unavailableCount > 0 ? (
+      <button
+        type="button"
+        onClick={() => removeFavorites(unavailableIds)}
+        className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full border border-primary/30 px-4 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+      >
+        إزالة الاختيارات غير المتاحة
+      </button>
+    ) : null;
+
+  if (result.items.length === 0) {
+    return (
+      <div>
+        <FavoritesEmpty hasUnavailableProducts={unavailableCount > 0} />
+
+        {cleanupButton && (
+          <div className="mt-4 flex justify-center">{cleanupButton}</div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <section aria-labelledby="favorites-results-title">
@@ -153,17 +174,21 @@ export function FavoritesContent() {
       </div>
 
       {unavailableCount > 0 && (
-        <p className="mb-6 flex items-start gap-3 rounded-2xl border border-border bg-surface px-4 py-3 text-xs leading-7 text-muted">
-          <FaCircleExclamation
-            aria-hidden="true"
-            className="mt-2 size-3 shrink-0 text-primary"
-          />
+        <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-border bg-surface px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex items-start gap-3 text-xs leading-7 text-muted">
+            <FaCircleExclamation
+              aria-hidden="true"
+              className="mt-2 size-3 shrink-0 text-primary"
+            />
 
-          <span>
-            بعض المنتجات المحفوظة غير متاحة حاليًا، لذلك لا تظهر ضمن هذه
-            الاختيارات.
-          </span>
-        </p>
+            <span>
+              بعض المنتجات المحفوظة غير متاحة حاليًا. يمكنك إزالة هذه الاختيارات
+              أو الاحتفاظ بها لوقت لاحق.
+            </span>
+          </p>
+
+          {cleanupButton}
+        </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

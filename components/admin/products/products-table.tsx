@@ -10,6 +10,7 @@ type ProductsTableProps = {
 const priceFormatter = new Intl.NumberFormat("ar-EG", {
   style: "currency",
   currency: "EGP",
+  minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
 
@@ -99,17 +100,33 @@ export function ProductsTable({
                 </td>
 
                 <td className="whitespace-nowrap px-5 py-5">
-                  <span
-                    className={`tabular-nums ${
-                      product.price === null
-                        ? "text-xs text-muted"
-                        : "font-semibold text-foreground"
-                    }`}
-                  >
-                    {product.price === null
-                      ? "السعر عند الاستفسار"
-                      : priceFormatter.format(product.price)}
-                  </span>
+                  {product.price === null ? (
+                    <span className="text-xs text-muted">
+                      السعر عند الاستفسار
+                    </span>
+                  ) : product.discount_percent > 0 &&
+                    product.sale_price !== null ? (
+                    <div className="space-y-1.5">
+                      <p className="text-xs text-muted">
+                        <del className="tabular-nums">
+                          {priceFormatter.format(product.price)}
+                        </del>
+                      </p>
+
+                      <p className="font-semibold tabular-nums text-foreground">
+                        <span className="sr-only">السعر بعد الخصم: </span>
+                        {priceFormatter.format(product.sale_price)}
+                      </p>
+
+                      <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[10px] font-medium text-primary">
+                        خصم {product.discount_percent}٪
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="font-semibold tabular-nums text-foreground">
+                      {priceFormatter.format(product.price)}
+                    </span>
+                  )}
                 </td>
 
                 <td className="whitespace-nowrap px-5 py-5">

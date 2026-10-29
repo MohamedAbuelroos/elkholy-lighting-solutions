@@ -86,6 +86,7 @@ const emptyValues: ProductFormValues = {
   description_en: "",
   sku: "",
   price: "",
+  discount_percent: "0",
   sort_order: "0",
   is_featured: false,
   is_popular: false,
@@ -252,6 +253,42 @@ export function ProductForm({
 
             <p id="price-help" className="mt-2 text-xs leading-6 text-muted">
               اتركه فارغًا لإظهار «السعر عند الاستفسار».
+            </p>
+          </div>
+          <div>
+            <label htmlFor="discount_percent" className="text-sm font-medium">
+              نسبة الخصم — اختياري
+            </label>
+
+            <div className="relative">
+              <input
+                id="discount_percent"
+                name="discount_percent"
+                type="number"
+                dir="ltr"
+                min={0}
+                max={99}
+                step={1}
+                required
+                value={values.discount_percent}
+                onChange={(event) =>
+                  updateField("discount_percent", event.target.value)
+                }
+                aria-describedby="discount-help"
+                className={`${inputClassName} pl-10`}
+              />
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-3 left-4 text-sm text-muted"
+              >
+                %
+              </span>
+            </div>
+
+            <p id="discount-help" className="mt-2 text-xs leading-6 text-muted">
+              اكتب نسبة من 0 إلى 99. الصفر يعني بدون خصم، ويلزم تحديد سعر لتطبيق
+              الخصم.
             </p>
           </div>
 

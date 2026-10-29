@@ -6,7 +6,7 @@ export type ProductInquiry = {
   name: string;
   slug: string;
   sku: string | null;
-  price: number | null;
+  sale_price: number | null;
 };
 
 export function buildWhatsAppUrl(
@@ -46,13 +46,13 @@ export function buildProductWhatsAppUrl(
   ).toString();
 
   const formattedPrice =
-    product.price === null
+    product.sale_price === null
       ? null
       : new Intl.NumberFormat("ar-EG", {
           style: "currency",
           currency: siteConfig.currency,
           maximumFractionDigits: 2,
-        }).format(product.price);
+        }).format(product.sale_price);
 
   const message = [
     "مرحبًا، أريد الاستفسار عن المنتج:",

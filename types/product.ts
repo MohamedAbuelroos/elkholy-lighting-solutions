@@ -17,6 +17,9 @@ export type Product = {
   sku: string | null;
   price: number | null;
 
+  discount_percent: number;
+  sale_price: number | null;
+
   images: ProductImage[];
 
   is_active: boolean;
