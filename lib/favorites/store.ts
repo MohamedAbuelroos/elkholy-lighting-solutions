@@ -97,3 +97,28 @@ export function toggleFavorite(productId: string) {
   // This event updates components in the current tab.
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
+
+export function removeFavorites(productIds: readonly string[]) {
+  if (typeof window === "undefined" || productIds.length === 0) return;
+
+  const idsToRemove = new Set(productIds);
+  const currentIds = parseFavoriteIds(getFavoritesSnapshot());
+  const nextIds = currentIds.filter((id) => !idsToRemove.has(id));
+
+  if (nextIds.length === currentIds.length) return;
+
+  memorySnapshot = JSON.stringify({
+    version: 1,
+    productIds: nextIds,
+  });
+
+  if (!memoryOnly) {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, memorySnapshot);
+    } catch {
+      memoryOnly = true;
+    }
+  }
+
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
