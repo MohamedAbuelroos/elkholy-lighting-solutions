@@ -1,4 +1,4 @@
-import type { CartItem } from "@/lib/cart/store";
+import { consumeCartItems, type CartItem } from "@/lib/cart/store";
 import type { OrderReceipt } from "@/lib/orders/order-form-types";
 
 export type CheckoutFields = {
@@ -40,19 +40,28 @@ export type SavedCheckout =
 
 // Keep development and production receipts separate on localhost.
 const STORAGE_KEY = `elkholy:checkout:v1:${process.env.NEXT_PUBLIC_SUPABASE_URL ?? "unconfigured"}`;
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function isCartItems(value: unknown): value is CartItem[] {
-  if (!Array.isArray(value) || value.length < 1 || value.length > 50) return false;
+  if (!Array.isArray(value) || value.length < 1 || value.length > 50)
+    return false;
   const seen = new Set<string>();
   return value.every((item: unknown) => {
-    if (!isRecord(item) || typeof item.productId !== "string" ||
-      !UUID_PATTERN.test(item.productId) || typeof item.quantity !== "number" ||
-      !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 999) return false;
+    if (
+      !isRecord(item) ||
+      typeof item.productId !== "string" ||
+      !UUID_PATTERN.test(item.productId) ||
+      typeof item.quantity !== "number" ||
+      !Number.isInteger(item.quantity) ||
+      item.quantity < 1 ||
+      item.quantity > 999
+    )
+      return false;
     const id = item.productId.toLowerCase();
     if (seen.has(id)) return false;
     seen.add(id);
@@ -63,20 +72,35 @@ function isCartItems(value: unknown): value is CartItem[] {
 function isFields(value: unknown): value is CheckoutFields {
   if (!isRecord(value)) return false;
   const limits = {
-    customer_name: 150, customer_phone: 40, governorate: 100,
-    city: 150, address: 1000, customer_notes: 2000,
+    customer_name: 150,
+    customer_phone: 40,
+    governorate: 100,
+    city: 150,
+    address: 1000,
+    customer_notes: 2000,
   };
-  return (value.fulfillment_method === "pickup" || value.fulfillment_method === "delivery") &&
-    Object.entries(limits).every(([key, limit]) =>
-      typeof value[key] === "string" && value[key].length <= limit);
+  return (
+    (value.fulfillment_method === "pickup" ||
+      value.fulfillment_method === "delivery") &&
+    Object.entries(limits).every(
+      ([key, limit]) =>
+        typeof value[key] === "string" && value[key].length <= limit,
+    )
+  );
 }
 
 function isReceipt(value: unknown): value is OrderReceipt {
-  return isRecord(value) &&
-    typeof value.orderId === "string" && UUID_PATTERN.test(value.orderId) &&
-    typeof value.orderNumber === "string" && /^\d+$/.test(value.orderNumber) &&
-    typeof value.trackingCode === "string" && /^KH(?:-[0-9A-F]{4}){6}$/.test(value.trackingCode) &&
-    typeof value.createdAt === "string" && Number.isFinite(Date.parse(value.createdAt));
+  return (
+    isRecord(value) &&
+    typeof value.orderId === "string" &&
+    UUID_PATTERN.test(value.orderId) &&
+    typeof value.orderNumber === "string" &&
+    /^\d+$/.test(value.orderNumber) &&
+    typeof value.trackingCode === "string" &&
+    /^KH(?:-[0-9A-F]{4}){6}$/.test(value.trackingCode) &&
+    typeof value.createdAt === "string" &&
+    Number.isFinite(Date.parse(value.createdAt))
+  );
 }
 
 // Throws if browser storage is blocked or corrupted. Never silently
@@ -86,24 +110,44 @@ export function readSavedCheckout(): SavedCheckout | null {
   if (raw === null) return null;
   if (raw.length > 50000) throw new Error("Invalid checkout session.");
   const value: unknown = JSON.parse(raw);
-  if (!isRecord(value) || value.version !== 1) throw new Error("Invalid checkout session.");
+  if (!isRecord(value) || value.version !== 1)
+    throw new Error("Invalid checkout session.");
 
   if (value.phase === "pending" && isRecord(value.attempt)) {
     const attempt = value.attempt;
-    if (typeof attempt.key === "string" && UUID_PATTERN.test(attempt.key) &&
-      isFields(attempt.fields) && isCartItems(attempt.items) &&
-      typeof attempt.isDirectOrder === "boolean") {
-      return { version: 1, phase: "pending", attempt: {
-        key: attempt.key, fields: attempt.fields,
-        items: attempt.items, isDirectOrder: attempt.isDirectOrder,
-      } };
+    if (
+      typeof attempt.key === "string" &&
+      UUID_PATTERN.test(attempt.key) &&
+      isFields(attempt.fields) &&
+      isCartItems(attempt.items) &&
+      typeof attempt.isDirectOrder === "boolean"
+    ) {
+      return {
+        version: 1,
+        phase: "pending",
+        attempt: {
+          key: attempt.key,
+          fields: attempt.fields,
+          items: attempt.items,
+          isDirectOrder: attempt.isDirectOrder,
+        },
+      };
     }
   }
 
-  if (value.phase === "success" && isReceipt(value.receipt) &&
-    isCartItems(value.items) && typeof value.isDirectOrder === "boolean") {
-    return { version: 1, phase: "success", receipt: value.receipt,
-      items: value.items, isDirectOrder: value.isDirectOrder };
+  if (
+    value.phase === "success" &&
+    isReceipt(value.receipt) &&
+    isCartItems(value.items) &&
+    typeof value.isDirectOrder === "boolean"
+  ) {
+    return {
+      version: 1,
+      phase: "success",
+      receipt: value.receipt,
+      items: value.items,
+      isDirectOrder: value.isDirectOrder,
+    };
   }
 
   throw new Error("Invalid checkout session.");
@@ -119,8 +163,30 @@ export function clearSavedCheckout() {
 
 export function attemptToFormData(attempt: CheckoutAttempt): FormData {
   const data = new FormData();
-  for (const [name, value] of Object.entries(attempt.fields)) data.set(name, value);
+  for (const [name, value] of Object.entries(attempt.fields))
+    data.set(name, value);
   data.set("submission_key", attempt.key);
   data.set("items", JSON.stringify(attempt.items));
   return data;
+}
+
+export function prepareCheckoutNavigation(): boolean {
+  try {
+    const saved = readSavedCheckout();
+
+    if (saved?.phase === "success") {
+      // Finish any interrupted cart cleanup before removing the receipt.
+      // The order marker prevents consuming the same quantities twice.
+      if (!saved.isDirectOrder) {
+        consumeCartItems(saved.items, saved.receipt.orderId);
+      }
+
+      clearSavedCheckout();
+    }
+
+    // Pending attempts remain available for recovery.
+    return true;
+  } catch {
+    return false;
+  }
 }

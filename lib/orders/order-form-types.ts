@@ -8,5 +8,5 @@ export type OrderReceipt = {
 export type OrderFormState = {
   error: string | null;
   receipt: OrderReceipt | null;
-  outcome: "idle" | "editable-error" | "uncertain" | "not-found" | "success";
+  outcome: "idle" | "editable-error" | "uncertain" | "not-found" | "challenge-error" | "success";
 };
