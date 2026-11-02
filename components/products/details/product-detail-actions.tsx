@@ -2,9 +2,16 @@
 
 import { useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
-import { FaHeart, FaMinus, FaPlus, FaRegHeart } from "react-icons/fa6";
-
+import {
+  FaBagShopping,
+  FaHeart,
+  FaMinus,
+  FaPlus,
+  FaRegHeart,
+} from "react-icons/fa6";
 import { useFavorites } from "@/hooks/use-favorites";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import Link from "next/link";
 
 type ProductDetailActionsProps = {
   productId: string;
@@ -66,32 +73,34 @@ export function ProductDetailActions({
     setQuantityText(String(quantity));
   }
 
-  const orderUrl = new URL(whatsappHref);
+  const directCheckoutHref = `/checkout?${new URLSearchParams({
+    product: productId,
+    quantity: String(isValidQuantity ? quantity : MIN_QUANTITY),
+  }).toString()}`;
 
-  orderUrl.searchParams.set(
-    "text",
-    [
-      "مرحبًا فريق الخولي، أود طلب المنتج التالي:",
-      "",
-      `المنتج: ${productName}`,
-      `كود المنتج: ${sku || "غير متوفر"}`,
-      `الكمية: ${isValidQuantity ? quantity : 1}`,
-      price !== null
-        ? `سعر الوحدة المعروض: ${priceFormatter.format(price)}`
-        : "السعر: يُحدد مع الفريق",
-      price !== null && isValidQuantity
-        ? `الإجمالي المبدئي للمنتجات: ${priceFormatter.format(
-            price * quantity,
-          )}`
-        : null,
-      "",
-      `رابط المنتج: ${productUrl}`,
-      "",
-      "برجاء تأكيد التوافر والسعر النهائي وتكلفة التوصيل وطرق الدفع المتاحة.",
-    ]
-      .filter((line) => line !== null)
-      .join("\n"),
-  );
+  let inquiryHref = whatsappHref;
+
+  if (whatsappHref.startsWith("https://wa.me/")) {
+    const inquiryUrl = new URL(whatsappHref);
+
+    inquiryUrl.searchParams.set(
+      "text",
+      [
+        "مرحبًا فريق الخولي، أود الاستفسار عن المنتج التالي:",
+        "",
+        `المنتج: ${productName}`,
+        sku ? `كود المنتج: ${sku}` : null,
+        "",
+        `رابط المنتج: ${productUrl}`,
+        "",
+        "برجاء توضيح المواصفات والتفاصيل المتاحة.",
+      ]
+        .filter((line) => line !== null)
+        .join("\n"),
+    );
+
+    inquiryHref = inquiryUrl.toString();
+  }
 
   return (
     <div>
@@ -182,16 +191,23 @@ export function ProductDetailActions({
           </span>
         </div>
       )}
-
+      <AddToCartButton
+        productId={productId}
+        productName={productName}
+        quantity={quantity}
+        disabled={!isValidQuantity}
+        className="mt-5"
+      />
       <div className="mt-5 flex items-stretch gap-2.5">
-        <a
-          href={isValidQuantity ? orderUrl.toString() : undefined}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={directCheckoutHref}
+          prefetch={false}
           aria-disabled={!isValidQuantity}
           tabIndex={isValidQuantity ? 0 : -1}
           onClick={(event) => {
-            if (!isValidQuantity) event.preventDefault();
+            if (!isValidQuantity) {
+              event.preventDefault();
+            }
           }}
           className={`inline-flex min-h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-3 py-3 text-xs font-medium leading-6 text-on-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${
             isValidQuantity
@@ -199,10 +215,9 @@ export function ProductDetailActions({
               : "cursor-not-allowed opacity-50"
           }`}
         >
-          <FaWhatsapp aria-hidden="true" className="size-5 shrink-0" />
-          اطلب المنتج عبر واتساب
-          <span className="sr-only">يفتح في تبويب جديد</span>
-        </a>
+          <FaBagShopping aria-hidden="true" className="size-4 shrink-0" />
+          اطلب الآن
+        </Link>
 
         <button
           type="button"
@@ -226,6 +241,22 @@ export function ProductDetailActions({
             <FaRegHeart aria-hidden="true" className="size-4" />
           )}
         </button>
+      </div>
+      <div className="mt-4 border-t border-border pt-3">
+        <a
+          href={inquiryHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-11 items-center gap-2 text-xs font-medium text-muted transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          <FaWhatsapp aria-hidden="true" className="size-4 text-primary" />
+          استفسر عن المنتج
+          <span className="sr-only">يفتح في تبويب جديد</span>
+        </a>
+
+        <p className="text-[10px] leading-7 text-muted">
+          لتسجيل طلبك ومتابعته، اضغط «اطلب الآن» وأكمل بياناتك.
+        </p>
       </div>
     </div>
   );
