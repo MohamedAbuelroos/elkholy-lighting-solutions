@@ -4,6 +4,7 @@ import { createHash, createHmac } from "node:crypto";
 
 import type { OrderFormState } from "@/lib/orders/order-form-types";
 import { createOrdersServerClient } from "@/lib/supabase/orders-server";
+import { verifyOrderTurnstile } from "@/lib/security/turnstile";
 import { checkOrderRequestLimit, hashOrderRateLimitValue } from "@/lib/orders/rate-limit";
 
 type SubmittedItem = { productId: string; quantity: number };
@@ -25,7 +26,7 @@ const databaseErrors: Record<string, string> = {
   CART_PRODUCTS_UNAVAILABLE: "بعض المنتجات لم تعد متاحة. راجع اختياراتك قبل الإرسال.",
 };
 
-function failure(error: string, outcome: "editable-error" | "uncertain" | "not-found" = "editable-error"): OrderFormState {
+function failure(error: string, outcome: "editable-error" | "uncertain" | "not-found" | "challenge-error" = "editable-error"): OrderFormState {
   return { error, receipt: null, outcome };
 }
 
@@ -153,6 +154,33 @@ export async function submitOrder(_previousState: OrderFormState, formData: Form
   const tracking = createTrackingDetails(submissionKey, trackingSecret);
   try {
     const supabase = createOrdersServerClient();
+    // A saved submission does not need a fresh challenge. Still call the
+    // original guarded operation below to check its request fingerprint.
+    const { data: existing, error: lookupError } = await supabase.rpc(
+      "recover_customer_order_submission",
+      {
+        p_idempotency_key: submissionKey,
+        p_tracking_code_hash: tracking.hash,
+      },
+    );
+
+    if (lookupError) {
+      console.error("Pre-submission recovery check failed", { code: lookupError.code });
+      return failure("تعذّر التأكد من نتيجة المحاولة السابقة. استخدم التحقق من نتيجة الطلب ثم حاول مرة أخرى.", "uncertain");
+    }
+
+    if (!existing?.[0]) {
+      const verification = await verifyOrderTurnstile(formData.get("turnstile_token"));
+      if (!verification.ok) {
+        return failure(
+          verification.reason === "challenge"
+            ? "لم يكتمل التحقق أو انتهت صلاحيته. أعد التحقق ثم أرسل نفس المحاولة."
+            : "تعذّر إكمال التحقق حاليًا. بيانات المحاولة محفوظة؛ حاول مرة أخرى بعد قليل.",
+          "challenge-error",
+        );
+      }
+    }
+
     const { data, error } = await supabase.rpc("create_customer_order_guarded", {
       p_idempotency_key: submissionKey,
       p_tracking_code_hash: tracking.hash,

@@ -17,6 +17,7 @@ import { loadCartProducts } from "@/app/(website)/cart/actions";
 import { getProductPath, routes } from "@/config/routes";
 import { useCart } from "@/hooks/use-cart";
 import { MAX_CART_QUANTITY } from "@/lib/cart/store";
+import { prepareCheckoutNavigation } from "@/lib/orders/checkout-session";
 
 type CartProducts = Awaited<ReturnType<typeof loadCartProducts>>;
 
@@ -476,13 +477,21 @@ export function CartContent() {
           قبل إتمام الطلب.
         </p>
         {availableCount > 0 && unavailableCount === 0 ? (
-          <Link
+          <a
             href="/checkout"
+            onClick={(event) => {
+              if (!prepareCheckoutNavigation()) {
+                event.preventDefault();
+                window.alert(
+                  "تعذّر تجهيز صفحة الطلب. احتفظ بكود طلبك السابق وتأكد من السماح بتخزين بيانات الموقع.",
+                );
+              }
+            }}
             className="mt-5 flex min-h-12 items-center justify-center gap-3 rounded-full bg-primary px-5 text-sm font-medium text-on-primary transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
           >
             متابعة الطلب
             <FaArrowLeft aria-hidden="true" className="size-3" />
-          </Link>
+          </a>
         ) : (
           <p className="mt-5 text-xs leading-7 text-muted">
             أزل المنتجات غير المتاحة وأضف منتجًا متاحًا للمتابعة.

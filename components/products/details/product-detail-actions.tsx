@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa6";
 import { useFavorites } from "@/hooks/use-favorites";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
-import Link from "next/link";
+import { prepareCheckoutNavigation } from "@/lib/orders/checkout-session";
 
 type ProductDetailActionsProps = {
   productId: string;
@@ -199,14 +199,21 @@ export function ProductDetailActions({
         className="mt-5"
       />
       <div className="mt-5 flex items-stretch gap-2.5">
-        <Link
+        <a
           href={directCheckoutHref}
-          prefetch={false}
           aria-disabled={!isValidQuantity}
           tabIndex={isValidQuantity ? 0 : -1}
           onClick={(event) => {
             if (!isValidQuantity) {
               event.preventDefault();
+              return;
+            }
+
+            if (!prepareCheckoutNavigation()) {
+              event.preventDefault();
+              window.alert(
+                "تعذّر تجهيز صفحة الطلب. احتفظ بكود طلبك السابق وتأكد من السماح بتخزين بيانات الموقع.",
+              );
             }
           }}
           className={`inline-flex min-h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-3 py-3 text-xs font-medium leading-6 text-on-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${
@@ -217,7 +224,7 @@ export function ProductDetailActions({
         >
           <FaBagShopping aria-hidden="true" className="size-4 shrink-0" />
           اطلب الآن
-        </Link>
+        </a>
 
         <button
           type="button"
