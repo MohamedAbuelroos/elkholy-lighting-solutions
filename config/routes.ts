@@ -9,6 +9,7 @@ export const routes = {
   branches: "/contact#branches",
   links: "/links",
   favorites: "/favorites",
+  trackOrder: "/track-order",
 } as const;
 
 export const mainNavigation = [
@@ -16,6 +17,10 @@ export const mainNavigation = [
   { label: "المنتجات", href: routes.products },
   { label: "مشاريعنا", href: routes.projects },
   { label: "من نحن", href: routes.about },
+  {
+    label: "متابعة الطلب",
+    href: routes.trackOrder,
+  },
   { label: "تواصل معنا", href: routes.contact },
 ] as const;
 

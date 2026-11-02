@@ -109,11 +109,19 @@ export default async function AdminLayout({
                   نظرة عامة
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/admin/orders"
+                  className="flex min-h-11 items-center rounded-control px-4 py-3 text-sm text-muted transition-colors hover:bg-surface-elevated hover:text-primary"
+                >
+                  الطلبات
+                </Link>
+              </li>
 
               <li>
                 <Link
                   href="/admin/categories"
-                  className="block rounded-lg px-3 py-3 text-sm transition-colors hover:bg-surface-elevated hover:text-primary"
+                  className="flex min-h-11 items-center rounded-control px-4 py-3 text-sm text-muted transition-colors hover:bg-surface-elevated hover:text-primary"
                 >
                   فئات المنتجات
                 </Link>

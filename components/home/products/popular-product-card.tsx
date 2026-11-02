@@ -5,6 +5,7 @@ import { FaArrowLeft, FaImage, FaStar } from "react-icons/fa6";
 import { getProductPath } from "@/config/routes";
 import type { Product } from "@/types/product";
 import { FavoriteButton } from "@/components/products/favorite-button";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 
 type PopularProductCardProps = {
   product: Product;
@@ -30,11 +31,11 @@ export function PopularProductCard({
     product.sale_price !== null;
 
   return (
-    <div className="relative h-full">
+    <div className="relative flex h-full flex-col">
       <Link
         href={getProductPath(product.slug)}
         aria-label={`عرض تفاصيل ${product.name_ar}`}
-        className="group block h-full overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-200 hover:border-primary/60 focus-visible:border-primary motion-reduce:transition-none"
+        className="group block flex-1 overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-200 hover:border-primary/60 focus-visible:border-primary motion-reduce:transition-none"
       >
         <article className="flex h-full flex-col">
           {/* Full-width image */}
@@ -138,6 +139,9 @@ export function PopularProductCard({
           </div>
         </article>
       </Link>
+      <div className="mt-3">
+        <AddToCartButton productId={product.id} productName={product.name_ar} />
+      </div>
       <FavoriteButton
         productId={product.id}
         productName={product.name_ar}

@@ -15,7 +15,7 @@ import { NavigationHint } from "@/components/ui/navigation-hint";
 import { mainNavigation, routes } from "@/config/routes";
 import { siteConfig } from "@/config/site";
 import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
-
+import { CartLink } from "@/components/layout/cart-link";
 import type { Category } from "@/types/category";
 
 import styles from "./navbar-polish.module.css";
@@ -96,7 +96,7 @@ export function NavbarClient({ categories }: NavbarClientProps) {
             <FaWhatsapp aria-hidden="true" className="size-4 shrink-0" />
             تواصل معنا
           </a>
-
+          <CartLink />
           <FavoritesLink />
           <ThemeToggle />
 

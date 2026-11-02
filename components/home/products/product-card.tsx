@@ -5,6 +5,7 @@ import { FaImage, FaStar } from "react-icons/fa6";
 import { getProductPath } from "@/config/routes";
 import type { Product } from "@/types/product";
 import { FavoriteButton } from "@/components/products/favorite-button";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 
 type ProductCardProps = {
   product: Product;
@@ -127,6 +128,9 @@ export function ProductCard({ product, categoryName }: ProductCardProps) {
             </div>
           </div>
         </div>
+      </div>
+      <div className="px-4 pb-4">
+        <AddToCartButton productId={product.id} productName={product.name_ar} />
       </div>
     </article>
   );

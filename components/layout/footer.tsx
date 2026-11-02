@@ -18,6 +18,7 @@ import { getPrimaryWhatsAppHref } from "@/lib/utils/whatsapp";
 const footerNavigation = [
   ...mainNavigation,
   { label: "المفضلة", href: routes.favorites },
+  { label: "متابعة الطلب", href: "/track-order" },
 ].filter(
   (item, index, items) =>
     items.findIndex((candidate) => candidate.href === item.href) === index,
