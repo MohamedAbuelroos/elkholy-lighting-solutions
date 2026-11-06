@@ -17,7 +17,7 @@ export default function HomePage() {
       <PopularProducts />
       <SolutionsSection />
       <ProjectsSection />
-      <WhyElkholy />
+      {/* <WhyElkholy /> */}
       {/* <StatsSection /> */}
       <TestimonialsSection />
       <ContactCTA />

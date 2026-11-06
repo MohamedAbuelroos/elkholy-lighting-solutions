@@ -3,6 +3,7 @@ export type Testimonial = {
   name: string;
   context: string;
   quote: string;
+  rating: 1 | 2 | 3 | 4 | 5;
   is_active: boolean;
   sort_order: number;
 };

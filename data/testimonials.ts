@@ -1,53 +1,54 @@
 import type { Testimonial } from "@/types/testimonial";
 
 export const testimonialsConfig = {
-  isDemo: true,
+  isDemo: false,
+  rating: 3.8,
+  reviewCount: 11,
+  updatedAtLabel: "6 نوفمبر 2026",
+  mapsUrl: "https://maps.app.goo.gl/MikNui1prUNc8twx8",
+
+  // Replace with Google's direct review-request link when available.
+  writeReviewUrl: "https://maps.app.goo.gl/MikNui1prUNc8twx8",
 };
 
 export const testimonials = [
   {
-    id: "demo-review-01",
-    name: "عميل تجريبي 01",
-    context: "اختيار إضاءة منزلية",
+    id: "google-review-aa-01",
+    name: "A Al",
+    context: "مراجعة منشورة على Google",
     quote:
-      "نص تجريبي لمعاينة التصميم: ساعدني وضوح الخيارات وشرح الفروق بين وحدات الإضاءة في تحديد ما يناسب مساحتي.",
+      "المحترم المهندس إبراهيم الخولي شكرا علي تعاملك الراقي\nانصح بتعامل معه جودة ممتازة",
+    rating: 5,
     is_active: true,
     sort_order: 1,
   },
+
+  // Design examples only. Keep inactive until replaced with real feedback.
   {
-    id: "demo-review-02",
-    name: "عميل تجريبي 02",
-    context: "تشطيبات كهربائية",
-    quote:
-      "نص تجريبي لمعاينة التصميم: كنت أبحث عن مفاتيح تتناسب مع الديكور، وكان تنوع التصميمات مفيدًا في الاختيار.",
+    id: "google-review-aa-02",
+    name: "Akram Melad",
+    context: "مراجعة منشورة على Google",
+    quote: "بجد انا اول مره اشوف عرض وموديلات تخطف نظري مكان جميل فعل.",
+    rating: 5,
     is_active: true,
     sort_order: 2,
   },
   {
-    id: "demo-review-03",
-    name: "عميل تجريبي 03",
-    context: "حلول منزل ذكي",
-    quote:
-      "نص تجريبي لمعاينة التصميم: شرح الاستخدام والتوافق مع احتياجات المنزل جعل المقارنة بين الحلول أسهل.",
+    id: "google-review-aa-03",
+    name: "منير فايز",
+    context: "مراجعة منشورة على Google",
+    quote: "اسعار و مواصفات ممتازة.",
+    rating: 5,
     is_active: true,
     sort_order: 3,
   },
   {
-    id: "demo-review-04",
-    name: "عميل تجريبي 04",
-    context: "إضاءة مساحة تجارية",
-    quote:
-      "نص تجريبي لمعاينة التصميم: ساعدتني معرفة المواصفات على اختيار إضاءة تتناسب مع طبيعة المكان.",
+    id: "google-review-aa-04",
+    name: "منير فايز",
+    context: "مراجعة منشورة على Google",
+    quote: "معاملات متميزه وموديلات وعروض أفضل.",
+    rating: 5,
     is_active: true,
-    sort_order: 4,
-  },
-  {
-    id: "demo-review-05",
-    name: "عميل تجريبي 05",
-    context: "اختيار وحدات معلّقة",
-    quote:
-      "نص تجريبي لمعاينة التصميم: وجدت خيارات متنوعة، واستطعت مقارنة المقاسات والتصميمات قبل تحديد اختياري.",
-    is_active: true,
-    sort_order: 5,
+    sort_order: 3,
   },
 ] satisfies Testimonial[];

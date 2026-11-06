@@ -1,23 +1,25 @@
-.overlay {
-  background: linear-gradient(
-    to left,
-    rgb(5 7 11 / 92%) 0%,
-    rgb(5 7 11 / 76%) 55%,
-    rgb(5 7 11 / 38%) 100%
-  );
+.image {
+  object-position: 32% center;
 }
 
-@media (min-width: 1024px) {
-  .overlay {
-    background: linear-gradient(
+.overlay {
+  background:
+    linear-gradient(
+      to bottom,
+      rgb(5 7 11 / 26%) 0%,
+      rgb(5 7 11 / 10%) 35%,
+      rgb(5 7 11 / 30%) 100%
+    ),
+    linear-gradient(
       to left,
-      rgb(5 7 11 / 92%) 0%,
-      rgb(5 7 11 / 78%) 26%,
-      rgb(5 7 11 / 40%) 48%,
-      rgb(5 7 11 / 10%) 72%,
-      rgb(5 7 11 / 5%) 100%
+      rgb(5 7 11 / 64%) 0%,
+      rgb(5 7 11 / 48%) 55%,
+      rgb(5 7 11 / 16%) 100%
     );
-  }
+}
+
+.bottomFade {
+  height: 56px;
 }
 
 .bottomFade::before,
@@ -30,12 +32,7 @@
 }
 
 .bottomFade::before {
-  background: linear-gradient(
-    to top,
-    #05070b,
-    rgb(5 7 11 / 65%) 35%,
-    transparent
-  );
+  background: linear-gradient(to top, #05070b, transparent);
   opacity: 1;
 }
 
@@ -53,18 +50,51 @@
 }
 
 .reveal {
-  animation: hero-enter 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: hero-enter 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes hero-enter {
   from {
-    opacity: 0.65;
-    transform: translateY(12px);
+    opacity: 0;
+    transform: translateY(16px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (min-width: 640px) {
+  .image {
+    object-position: 42% center;
+  }
+
+  .bottomFade {
+    height: 80px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .image {
+    object-position: center;
+  }
+
+  .overlay {
+    background:
+      linear-gradient(
+        to bottom,
+        rgb(5 7 11 / 18%) 0%,
+        transparent 28%,
+        transparent 80%,
+        rgb(5 7 11 / 8%) 100%
+      ),
+      linear-gradient(
+        to left,
+        rgb(5 7 11 / 18%) 0%,
+        rgb(5 7 11 / 8%) 40%,
+        transparent 65%
+      );
   }
 }
 
