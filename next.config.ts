@@ -1,30 +1,27 @@
 import type { NextConfig } from "next";
 
+const storageHosts = [
+  "kyitgvpypbfahvqhfmul.supabase.co",
+  "kezvcynbjsdzkexswrmi.supabase.co",
+] as const;
+
+const imageBuckets = [
+  "product-images",
+  "category-images",
+  "project-images",
+] as const;
+
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "kyitgvpypbfahvqhfmul.supabase.co",
+    remotePatterns: storageHosts.flatMap((hostname) =>
+      imageBuckets.map((bucket) => ({
+        protocol: "https" as const,
+        hostname,
         port: "",
-        pathname: "/storage/v1/object/public/product-images/**",
+        pathname: `/storage/v1/object/public/${bucket}/**`,
         search: "",
-      },
-      {
-        protocol: "https",
-        hostname: "kyitgvpypbfahvqhfmul.supabase.co",
-        port: "",
-        pathname: "/storage/v1/object/public/category-images/**",
-        search: "",
-      },
-      {
-        protocol: "https",
-        hostname: "kyitgvpypbfahvqhfmul.supabase.co",
-        port: "",
-        pathname: "/storage/v1/object/public/project-images/**",
-        search: "",
-      },
-    ],
+      })),
+    ),
   },
 };
 
