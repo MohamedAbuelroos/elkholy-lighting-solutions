@@ -13,16 +13,15 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-background pt-20 text-white lg:pt-24"
+      className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-background pb-10 pt-28 text-white sm:pb-12 sm:pt-32 lg:pb-14 lg:pt-36"
     >
-      {/* الصورة لا تنتظر أنيميشن الدخول. */}
       <Image
         src={siteConfig.hero.src}
         alt={siteConfig.hero.alt}
         fill
         preload
         sizes="100vw"
-        className="-z-30 object-cover object-[25%_center] sm:object-center"
+        className={`${styles.image} -z-30 object-cover`}
       />
 
       <div
@@ -32,82 +31,80 @@ export function Hero() {
 
       <div
         aria-hidden="true"
-        className={`${styles.bottomFade} pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-28 sm:h-36`}
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-14 bg-gradient-to-t from-background to-transparent sm:h-20"
       />
 
-      <div className="site-container relative py-14 sm:py-20 lg:py-20">
-        <div className="max-w-[42rem]">
+      <div className="site-container relative w-full">
+        <div className="max-w-xl lg:max-w-[49%] xl:max-w-[46%]">
           <p
-            className={`${styles.reveal} mb-6 flex items-center gap-3 text-[11px] font-medium leading-7 text-[#E2B858] sm:mb-7 sm:text-xs`}
+            className={`${styles.reveal} mb-5 flex items-center gap-3 text-[10px] font-medium leading-7 text-[#E8CC91] sm:mb-6 sm:text-xs`}
           >
             <span
               aria-hidden="true"
-              className="h-px w-8 shrink-0 bg-[#E2B858]/70"
+              className="h-px w-7 shrink-0 bg-[#E2B858]/70 sm:w-9"
             />
             تأسيس · تشطيبات كهربائية · أنظمة ذكية
           </p>
 
           <h1
             id="hero-title"
-            style={{ animationDelay: "70ms" }}
-            className={`${styles.reveal} text-[clamp(2.25rem,3.6vw,4.125rem)] font-bold leading-[1.5]`}
+            style={{ animationDelay: "80ms" }}
+            className={`${styles.reveal} text-[clamp(2.25rem,4.1vw,4.5rem)] font-bold leading-[1.4]`}
           >
-            <span className="block">نوّر بيتك</span>
+            <span className="block text-[#FAF6ED]">نوّر بيتك،</span>
 
-            <span className="mt-1 block text-[1em] text-[#E2B858]">
-              وكمّل حكاية ذوقك.
-            </span>
+            <span className="mt-1 block text-[#E2B858]">وكمّل حكاية ذوقك.</span>
           </h1>
 
           <p
-            style={{ animationDelay: "140ms" }}
-            className={`${styles.reveal} mt-5 max-w-[29rem] text-sm font-normal leading-8 text-white/75 sm:mt-6 sm:text-base sm:leading-9`}
+            style={{ animationDelay: "160ms" }}
+            className={`${styles.reveal} mt-5 max-w-[27rem] text-sm leading-8 text-white/75 sm:text-[15px] sm:leading-8`}
           >
             إضاءة تبرز جمال بيتك، وتشطيبات تكمل أناقته، وحلول ذكية تضيف راحة
             ليومك. اختيارات الخولي لكل تفصيلة في مساحتك.
           </p>
 
           <div
-            style={{ animationDelay: "210ms" }}
-            className={`${styles.reveal} mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4`}
+            style={{ animationDelay: "240ms" }}
+            className={`${styles.reveal} mt-7 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap sm:mt-8`}
           >
-            <a
-              href={getPrimaryWhatsAppHref()}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="تواصل مع فريق الخولي عبر واتساب — يفتح في تبويب جديد"
-              className="inline-flex min-h-13 items-center justify-center gap-3 rounded-full bg-[#D6A744] px-7 py-3.5 text-sm font-medium text-[#05070B] transition-colors duration-200 hover:bg-[#E2B858] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E2B858]"
-            >
-              <FaWhatsapp aria-hidden="true" className="size-5 shrink-0" />
-              تواصل مع فريق الخولي
-            </a>
-
             <Link
               href={routes.products}
-              className="group inline-flex min-h-13 items-center justify-center gap-4 rounded-full border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-medium text-white transition-colors duration-200 hover:border-[#E2B858]/60 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E2B858]"
+              className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#E2B858]/50 bg-[#D6A744] px-6 py-3 text-xs font-semibold text-[#17120A] transition-colors duration-200 hover:bg-[#E6BD65] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E2B858] sm:min-h-13 sm:px-7 sm:text-sm"
             >
               استكشف منتجاتنا
               <FaArrowLeft
                 aria-hidden="true"
-                className="size-3.5 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-x-1"
+                className="size-3 shrink-0 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-x-1"
               />
             </Link>
+
+            <a
+              href={getPrimaryWhatsAppHref()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-white/30 bg-black/10 px-6 py-3 text-xs font-medium text-white transition-colors duration-200 hover:border-white/50 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E2B858] sm:min-h-13 sm:text-sm"
+            >
+              <FaWhatsapp aria-hidden="true" className="size-4 shrink-0" />
+              تواصل مع فريق الخولي
+              <span className="sr-only">يفتح في تبويب جديد</span>
+            </a>
           </div>
 
           <div
-            style={{ animationDelay: "280ms" }}
-            className={`${styles.reveal} mt-7 sm:mt-8`}
+            style={{ animationDelay: "320ms" }}
+            className={`${styles.reveal} mt-5 sm:mt-6`}
           >
             <Link
               href={routes.branches}
-              className="inline-flex min-h-10 items-center gap-2.5 text-[11px] leading-6 text-white/60 transition-colors hover:text-white sm:text-xs"
+              className="inline-flex min-h-11 items-center gap-2.5 text-[11px] leading-6 text-white/75 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E2B858] sm:text-xs"
             >
               <FaLocationDot
                 aria-hidden="true"
-                className="size-3.5 shrink-0 text-[#E2B858]/80"
+                className="size-3.5 shrink-0 text-[#E2B858]"
               />
               زور معارض الخولي بدمنهور
-              <FaArrowLeft aria-hidden="true" className="size-2.5" />
+              <FaArrowLeft aria-hidden="true" className="size-2.5 shrink-0" />
             </Link>
           </div>
         </div>

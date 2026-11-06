@@ -12,6 +12,7 @@ type AddToCartButtonProps = {
   quantity?: number;
   disabled?: boolean;
   className?: string;
+  iconOnly?: boolean;
 };
 
 type Feedback = {
@@ -27,6 +28,7 @@ export function AddToCartButton({
   quantity = 1,
   disabled = false,
   className = "",
+  iconOnly = false,
 }: AddToCartButtonProps) {
   const { addToCart } = useCart();
 
@@ -35,7 +37,6 @@ export function AddToCartButton({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    // Hide this notification when another cart button is used.
     function dismiss() {
       setFeedback(null);
 
@@ -97,10 +98,19 @@ export function AddToCartButton({
         disabled={disabled}
         onClick={handleAdd}
         aria-label={`إضافة ${productName} إلى السلة`}
-        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2.5 text-xs font-medium leading-6 text-primary transition-colors hover:border-primary hover:bg-primary hover:text-on-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none"
+        title={iconOnly ? "أضف إلى السلة" : undefined}
+        className={`inline-flex shrink-0 items-center justify-center transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none ${
+          iconOnly
+            ? "size-12 rounded-2xl border border-primary/40 bg-primary text-on-primary hover:bg-primary-hover"
+            : "min-h-11 w-full gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2.5 text-xs font-medium leading-6 text-primary hover:border-primary hover:bg-primary hover:text-on-primary"
+        }`}
       >
-        <FaCartPlus aria-hidden="true" className="size-4 shrink-0" />
-        أضف إلى السلة
+        <FaCartPlus
+          aria-hidden="true"
+          className={`${iconOnly ? "size-5" : "size-4"} shrink-0`}
+        />
+
+        {!iconOnly && "أضف إلى السلة"}
       </button>
 
       {feedback &&

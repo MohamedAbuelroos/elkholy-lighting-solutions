@@ -73,8 +73,8 @@ export function AboutHero() {
 
             <div className="relative isolate aspect-[5/4] overflow-hidden rounded-3xl bg-surface-elevated lg:aspect-[4/5] lg:max-h-[560px]">
               <Image
-                src={siteConfig.hero.src}
-                alt={siteConfig.hero.alt}
+                src={siteConfig.about.src}
+                alt={siteConfig.about.alt}
                 fill
                 preload
                 sizes="(min-width: 1360px) 640px, (min-width: 1024px) 50vw, 100vw"

@@ -12,6 +12,10 @@ export const siteConfig = {
     alt: company.nameAr,
   },
   hero: {
+    src: "/images/hero.png",
+    alt: "صورة توضيحية لمعرض الخولي للإضاءة والأنظمة الذكية",
+  },
+  about: {
     src: "/images/elkholyHero.png",
     alt: "صورة توضيحية لمعرض الخولي للإضاءة والأنظمة الذكية",
   },
